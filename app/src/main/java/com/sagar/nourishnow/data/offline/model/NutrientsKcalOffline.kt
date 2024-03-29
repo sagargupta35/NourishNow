@@ -6,15 +6,15 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 
-@Entity(tableName = "NutrientsKcal",
+@Entity(tableName = "NutrientsKcalOffline",
     foreignKeys = [ForeignKey(
-        entity = CalorieStats::class,
+        entity = CalorieStatsOffline::class,
         parentColumns = ["date"],
         childColumns = ["date"],
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE
     )])
-data class NutrientsKcal (
+data class NutrientsKcalOffline (
     @PrimaryKey(autoGenerate = false)
     val date: Date,
     val carbohydrates: Double,

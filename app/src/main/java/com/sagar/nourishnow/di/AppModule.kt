@@ -1,8 +1,8 @@
 package com.sagar.nourishnow.di
 
 import com.sagar.nourishnow.common.Constants
-import com.sagar.nourishnow.data.remote.EdamamApi
-import com.sagar.nourishnow.data.remote.repository.RecipeRepositoryImpl
+import com.sagar.nourishnow.domain.remote.EdamamApi
+import com.sagar.nourishnow.data.repository.RecipeRepositoryImpl
 import com.sagar.nourishnow.domain.repository.RecipeRepository
 import com.squareup.moshi.Moshi
 import dagger.Module

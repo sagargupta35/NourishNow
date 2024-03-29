@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 
-@Entity(tableName = "CalorieStats")
-data class CalorieStats(
+@Entity(tableName = "CalorieStatsOffline")
+data class CalorieStatsOffline(
     @PrimaryKey(autoGenerate = false)
     val date: Date,
     val calorieLimit: Int,

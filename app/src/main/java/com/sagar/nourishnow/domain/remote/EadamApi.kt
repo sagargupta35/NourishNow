@@ -1,8 +1,8 @@
-package com.sagar.nourishnow.data.remote
+package com.sagar.nourishnow.domain.remote
 
 import com.sagar.nourishnow.common.Resource
-import com.sagar.nourishnow.data.remote.dto.IngredientDto
-import com.sagar.nourishnow.data.remote.dto.RecipeDto
+import com.sagar.nourishnow.domain.remote.dto.IngredientDto
+import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Call

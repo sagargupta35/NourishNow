@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.data.remote.dto
+package com.sagar.nourishnow.domain.remote.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -8,7 +8,7 @@ data class NutrientInformation(
     val quantity: Double?,
     val measure: String?,
     @Json(name = "foodMatch")
-    val food: String?,
+    val name: String?,
     @Json(name = "retainedWeight")
     val weight: Double?,
     val nutrients: Map<String, NutrientDto>?

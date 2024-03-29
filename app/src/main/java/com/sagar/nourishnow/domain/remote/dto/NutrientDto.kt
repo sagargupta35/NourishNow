@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.data.remote.dto
+package com.sagar.nourishnow.domain.remote.dto
 
 import com.squareup.moshi.JsonClass
 

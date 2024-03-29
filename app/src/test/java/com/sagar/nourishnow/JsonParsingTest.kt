@@ -1,7 +1,7 @@
 package com.sagar.nourishnow
 
 import com.sagar.nourishnow.common.Constants.jsonData
-import com.sagar.nourishnow.data.remote.dto.RecipeDto
+import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import org.junit.Test

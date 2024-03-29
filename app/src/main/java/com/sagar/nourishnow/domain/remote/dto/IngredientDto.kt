@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.data.remote.dto
+package com.sagar.nourishnow.domain.remote.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -11,4 +11,4 @@ data class IngredientDto(
     @Json(name = "parsed")
     val nutrientInformation: List<NutrientInformation>?,
 
-)
+    )

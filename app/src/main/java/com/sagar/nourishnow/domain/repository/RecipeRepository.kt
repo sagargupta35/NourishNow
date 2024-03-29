@@ -1,7 +1,7 @@
 package com.sagar.nourishnow.domain.repository
 
 import com.sagar.nourishnow.common.Resource
-import com.sagar.nourishnow.data.remote.dto.RecipeDto
+import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 

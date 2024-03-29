@@ -1,8 +1,8 @@
-package com.sagar.nourishnow.data.remote.repository
+package com.sagar.nourishnow.data.repository
 
 import com.sagar.nourishnow.common.Resource
-import com.sagar.nourishnow.data.remote.EdamamApi
-import com.sagar.nourishnow.data.remote.dto.RecipeDto
+import com.sagar.nourishnow.domain.remote.EdamamApi
+import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.repository.RecipeRepository
 import kotlinx.coroutines.flow.Flow
