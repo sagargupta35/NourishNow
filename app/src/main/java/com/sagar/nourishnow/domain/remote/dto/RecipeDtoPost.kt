@@ -4,7 +4,7 @@ import com.squareup.moshi.JsonClass
 
 
 @JsonClass(generateAdapter = true)
-data class Recipe(
+data class RecipeDtoPost(
     val title: String? = null,
     val ingredients: List<String>,
     val url: String? = null,

@@ -1,11 +1,7 @@
 package com.sagar.nourishnow.domain.remote
 
-import com.sagar.nourishnow.common.Resource
-import com.sagar.nourishnow.domain.remote.dto.IngredientDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
-import com.sagar.nourishnow.domain.model.Recipe
-import kotlinx.coroutines.flow.Flow
-import retrofit2.Call
+import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -23,5 +19,5 @@ interface EdamamApi {
         "Content-Type: application/json"
     )
     @POST("api/nutrition-details")
-    suspend fun getRecipeNutrition(@Body recipe: Recipe, @QueryMap queryMap: Map<String, String>): RecipeDto
+    suspend fun getRecipeNutrition(@Body recipe: RecipeDtoPost, @QueryMap queryMap: Map<String, String>): RecipeDto
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NourishNow</string>
+    <string name="no_value">No value</string>
 </resources>

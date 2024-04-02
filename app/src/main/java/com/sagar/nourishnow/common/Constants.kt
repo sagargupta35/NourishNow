@@ -2,6 +2,7 @@ package com.sagar.nourishnow.common
 
 
 object Constants{
+    val emptyValue = "Empty Value"
     val jsonData = """
     {
       "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_4178837fb5f242e8a006ce73b98e02eb",

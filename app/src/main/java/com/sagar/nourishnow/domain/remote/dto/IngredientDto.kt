@@ -10,5 +10,4 @@ data class IngredientDto(
     val name: String?,
     @Json(name = "parsed")
     val nutrientInformation: List<NutrientInformation>?,
-
-    )
+)

@@ -3,8 +3,8 @@ package com.sagar.nourishnow.data.repository
 import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.remote.EdamamApi
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
-import com.sagar.nourishnow.domain.model.Recipe
-import com.sagar.nourishnow.domain.repository.RecipeRepository
+import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
+import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -12,9 +12,9 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class RecipeRepositoryImpl @Inject constructor(
+class RecipeRemoteRepositoryImpl @Inject constructor(
     private val edamamApi: EdamamApi
-): RecipeRepository {
+): RecipeRemoteRepository {
     override suspend fun getIngredientNutrition(queryMap: Map<String, String>): Flow<Resource<RecipeDto>> = flow {
         emit(Resource.Loading("Fetching the requested ingredient"))
         try{
@@ -31,7 +31,7 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun getRecipeNutrition(
         queryMap: Map<String, String>,
-        recipe: Recipe
+        recipe: RecipeDtoPost
     ): Flow<Resource<RecipeDto>> = flow {
         emit(Resource.Loading("Fetching the requested Recipe"))
         try{
