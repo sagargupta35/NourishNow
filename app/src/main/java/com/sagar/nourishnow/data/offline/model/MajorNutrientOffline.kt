@@ -3,6 +3,8 @@ package com.sagar.nourishnow.data.offline.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.sagar.nourishnow.domain.model.MajorNutrient
+import com.sagar.nourishnow.domain.model.Nutrient
 
 
 /**
@@ -29,9 +31,17 @@ each major nutrient has a one to many relationship to th nutrient table
 )
 data class MajorNutrientOffline(
     @PrimaryKey(autoGenerate = true)
-    val majorNutrientId:Int = 1,
+    val majorNutrientId:Long = 0,
     val name: String,
-
-    val recipeId: Int?,
-    val ingredientId: Int?
-)
+    val recipeId: Long?,
+    val ingredientId: Long?
+){
+    fun toMajorNutrient(
+        nutrients: List<Nutrient>
+    ): MajorNutrient = MajorNutrient(
+        recipeId = recipeId,
+        ingredientId = ingredientId,
+        name = name,
+        nutrients = nutrients
+    )
+}

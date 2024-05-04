@@ -8,44 +8,39 @@ import com.sagar.nourishnow.data.offline.model.MajorNutrientOffline
 import com.sagar.nourishnow.data.offline.model.NutrientOffline
 import com.sagar.nourishnow.data.offline.model.NutrientsKcalOffline
 import com.sagar.nourishnow.data.offline.model.RecipeOffline
+import com.sagar.nourishnow.domain.model.CalorieStats
+import com.sagar.nourishnow.domain.model.Ingredient
+import com.sagar.nourishnow.domain.model.IngredientItem
+import com.sagar.nourishnow.domain.model.MajorNutrient
 import com.sagar.nourishnow.domain.model.Nutrient
+import com.sagar.nourishnow.domain.model.NutrientsKcal
+import com.sagar.nourishnow.domain.model.Recipe
+import com.sagar.nourishnow.domain.model.RecipeItem
+import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import java.time.LocalDate
 import java.util.Date
 
 
 interface RecipeOfflineRepository {
-    suspend fun addNutrient(nutrientOffline: NutrientOffline)
+    suspend fun addRecipe(recipeDto: RecipeDto, date:LocalDate, name:String): Flow<Resource<Recipe>>
 
-    suspend fun addMajorNutrient(majorNutrientOffline: MajorNutrientOffline)
+    suspend fun deleteRecipe(recipeId: Long)
 
-    suspend fun addIngredient(ingredientOffline: IngredientOffline)
+    fun getIngredientById(ingredientId: Long): Flow<Resource<Ingredient>>
 
-    suspend fun addRecipe(recipeOffline: RecipeOffline)
+    fun getRecipeById(recipeId: Long): Flow<Resource<Recipe>>
 
-    suspend fun updateIngredient(ingredientOffline: IngredientOffline)
+    fun getCalorieStatsByDate(date: LocalDate): Flow<Resource<CalorieStatsOffline>>
 
-    suspend fun updateRecipe(recipeOffline: RecipeOffline)
+    fun getNutrientKcalByDate(date: LocalDate): Flow<Resource<NutrientsKcalOffline>>
 
-    suspend fun deleteRecipe(recipe: RecipeOffline)
+    fun getRecipeItemsByDate(date: LocalDate): Flow<Resource<List<RecipeItem>>>
 
-    suspend fun deleteIngredient(ingredientOffline: IngredientOffline)
+    suspend fun updateNutrientsKcal(nutrientsKcal: NutrientsKcal)
 
-    fun getNutrientByMajorNutrientId(majorNutrientId: Int): Flow<Resource<List<Nutrient>>>
-
-    fun getMajorNutrientByRecipeId(recipeId: Int): Flow<List<MajorNutrientOffline>>
-
-    fun getMajorNutrientByIngredientId(ingredientId: Int): Flow<List<MajorNutrientOffline>>
-
-    fun getIngredientByRecipeId(recipeId: Int): Flow<List<IngredientOffline>>
-
-    fun getIngredientById(ingredientId: Int): Flow<IngredientOffline?>
-
-    fun getRecipeById(recipeId: Int): Flow<RecipeOffline?>
-
-    fun getCalorieStatsByDate(date: Date): Flow<CalorieStatsOffline>
-
-    fun getNutrientKcalByDate(date: Date): Flow<NutrientsKcalOffline>
+    suspend fun updateCalorieStats(calorieStats: CalorieStats)
 }

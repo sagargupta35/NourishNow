@@ -22,15 +22,15 @@ each nutrient will have the foreign key of the major nutrient it belongs to
 ])
 data class NutrientOffline(
     @PrimaryKey(autoGenerate = true)
-    val nutrientId: Int = 1,
+    val nutrientId: Long = 0,
     val name: String,
     val quantity: Double,
     val unit: MeasuringUnit,
-    val majorNutrientId: Int,
+    val majorNutrientId: Long,
 ){
     fun toNutrient(): Nutrient {
         return Nutrient(
-            quantity = quantity ?: 0.0,
+            quantity = quantity,
             unit = unit,
             name = name
         )

@@ -11,13 +11,15 @@ import java.util.Date
 
 
 data class Ingredient(
+    val ingredientId: Long,
     val name: String,
     val fatKcal: Double,
     val proteinKcal: Double,
     val carbohydrateKcal: Double,
     val majorNutrients: List<MajorNutrient>,
+    val recipeId: Long
 ){
-    fun toIngredientOffline(recipeId: Int?): IngredientOffline {
+    fun toIngredientOffline(): IngredientOffline {
         return IngredientOffline(
             name = name,
             fatKcal = fatKcal,

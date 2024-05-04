@@ -1,6 +1,7 @@
 package com.sagar.nourishnow.domain.model
 
 import com.sagar.nourishnow.data.offline.model.RecipeOffline
+import java.time.LocalDate
 import java.util.Date
 
 
@@ -16,8 +17,9 @@ data class Recipe(
     val proteinKcal: Double,
     val carbohydrateKcal: Double,
     val majorNutrients: List<MajorNutrient>,
-    val ingredients: List<Ingredient>,
-    val date: Date
+    val ingredients: List<IngredientItem>,
+    val date: LocalDate,
+    val recipeId: Long
 ){
     fun toRecipeOffline(): RecipeOffline{
         return RecipeOffline(
@@ -25,7 +27,7 @@ data class Recipe(
             fatKcal = fatKcal,
             proteinKcal = proteinKcal,
             carbohydrateKcal = carbohydrateKcal,
-            date = date
+            date = date,
         )
     }
 }

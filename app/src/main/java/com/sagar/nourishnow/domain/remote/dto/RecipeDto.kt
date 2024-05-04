@@ -11,5 +11,6 @@ data class RecipeDto(
     @Json(name = "totalNutrients")
     val nutrients: Map<String, NutrientDto>,
     val ingredients: List<IngredientDto>?,
+    @Json(name = "totalNutrientsKCal")
     val nutrientsKcal: NutrientsKcalDto?
 )

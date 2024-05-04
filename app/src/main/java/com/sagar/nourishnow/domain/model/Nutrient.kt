@@ -8,7 +8,7 @@ data class Nutrient(
     val  name: String,
     val unit: MeasuringUnit
 ){
-    fun toNutrientOffline(majorNutrientId: Int): NutrientOffline {
+    fun toNutrientOffline(majorNutrientId: Long): NutrientOffline {
         return NutrientOffline(
             quantity = quantity,
             name = name,

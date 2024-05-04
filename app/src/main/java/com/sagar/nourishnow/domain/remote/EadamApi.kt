@@ -10,10 +10,23 @@ import retrofit2.http.QueryMap
 
 interface EdamamApi {
 
+    /*
+    query map includes:
+        app id
+        app key
+        type = cooking
+        ingr: string
+     */
+
     @GET("api/nutrition-data")
     suspend fun getIngredientNutrition(@QueryMap queryMap: Map<String, String>): RecipeDto
 
 
+    /*
+    query map includes:
+        app id
+        app key
+     */
     @Headers(
         "accept: application/json",
         "Content-Type: application/json"
