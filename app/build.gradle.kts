@@ -11,6 +11,11 @@ plugins {
 
 }
 
+tasks {
+    // Configure the test task
+
+}
+
 android {
     namespace = "com.sagar.nourishnow"
     compileSdk = 34
@@ -27,6 +32,7 @@ android {
             useSupportLibrary = true
         }
     }
+
 
     buildTypes {
         release {
@@ -57,6 +63,8 @@ android {
     }
 }
 
+
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -75,6 +83,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+
 
     //viewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)

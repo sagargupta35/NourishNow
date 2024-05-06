@@ -4,6 +4,10 @@ import dagger.internal.MapBuilder
 
 
 object Constants{
+    const val appId = "f384e011"
+    const val appKey = "becbe3a43bf9dc60739a54e512f841c8"
+    const val baseUrl = "https://api.edamam.com/"
+
     val majorNutrientsMap: Map<String, List<String>> = mapOf(
         "Carbohydrates" to listOf("CHOCDF.net", "CHOCDF"),
         "Fats" to listOf("FAT", "FASAT", "FATRN", "FAMS", "FAPU"),
@@ -3812,7 +3816,5 @@ object Constants{
           }
         }
     """.trimIndent()
-    const val appId = "f384e011"
-    const val appKey = "becbe3a43bf9dc60739a54e512f841c8"
-    const val baseUrl = "https://api.edamam.com/"
+
 }

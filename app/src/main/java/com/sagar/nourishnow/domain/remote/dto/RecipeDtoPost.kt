@@ -8,8 +8,7 @@ import com.squareup.moshi.JsonClass
 data class RecipeDtoPost(
     val title: String? = null,
     @Json(name = "ingr")
-    val ingredients: List<String>,
-    val url: String? = null,
+    val ingredients: List<String> = listOf(),
     val summary: String? = null,
     val yield: String? = null,
     val time: String? = null,

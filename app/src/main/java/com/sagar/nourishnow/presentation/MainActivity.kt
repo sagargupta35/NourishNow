@@ -10,6 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.sagar.nourishnow.presentation.home_screen.HomeScreen
+import com.sagar.nourishnow.presentation.home_screen.HomeScreenUiEvent
+import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
 import com.sagar.nourishnow.ui.theme.NourishNowTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,11 +21,29 @@ class MainActivity : ComponentActivity() {
         setContent {
             NourishNowTheme {
                 // A surface container using the 'background' color from the theme
+                val viewModel = HomeScreenViewModel()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    HomeScreen(
+                        addRecipeClick = {
+                            viewModel.uiEvent(HomeScreenUiEvent.AddRecipeClick)
+                        },
+                        closeRecipeClick = {
+                            viewModel.uiEvent(HomeScreenUiEvent.CloseAddRecipeDialogue)
+                        },
+                        homeScreenUiState = viewModel._homeScreenUiState,
+                        updateRecipeName = {
+                            viewModel.uiEvent(HomeScreenUiEvent.UpdateRecipeName(it))
+                        },
+                        onGetRecipeClick = {
+                            viewModel.uiEvent(HomeScreenUiEvent.GetRecipeByNameClick)
+                        },
+                        onCancelGetRecipeByName = {
+                            viewModel.uiEvent(HomeScreenUiEvent.CancelGetRecipeByName)
+                        }
+                    )
                 }
             }
         }
