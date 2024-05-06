@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.presentation.home_screen
+package com.sagar.nourishnow.presentation.home_screen.common
 
 sealed class HomeScreenUiEvent {
     data object AddRecipeClick: HomeScreenUiEvent()

@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.presentation.add_recipe
+package com.sagar.nourishnow.presentation.get_recipe.common
 
 sealed class GetRecipeUiEvent {
     data class RecipeNameChange(val name: String): GetRecipeUiEvent()

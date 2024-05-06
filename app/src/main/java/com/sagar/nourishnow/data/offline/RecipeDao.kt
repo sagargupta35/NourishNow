@@ -14,6 +14,7 @@ import com.sagar.nourishnow.data.offline.model.NutrientOffline
 import com.sagar.nourishnow.data.offline.model.NutrientsKcalOffline
 import com.sagar.nourishnow.data.offline.model.RecipeItemOffline
 import com.sagar.nourishnow.data.offline.model.RecipeOffline
+import com.sagar.nourishnow.domain.model.NutrientsKcal
 import kotlinx.coroutines.flow.*
 import java.time.LocalDate
 import java.util.Date
@@ -38,6 +39,12 @@ interface RecipeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRecipe(recipeOffline: RecipeOffline): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addCalorieStats(calorieStatsOffline: CalorieStatsOffline)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addNutrientsKcal(nutrientOffline: NutrientOffline: NutrientsKcalOffline)
 
     @Query("SELECT * FROM RecipeItemOffline WHERE date = :date")
     suspend fun getAllRecipeItems(date: LocalDate): List<RecipeItemOffline>

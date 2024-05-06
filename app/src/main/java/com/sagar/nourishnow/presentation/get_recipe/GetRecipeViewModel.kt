@@ -1,4 +1,4 @@
-package com.sagar.nourishnow.presentation.add_recipe
+package com.sagar.nourishnow.presentation.get_recipe
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -10,6 +10,7 @@ import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
+import com.sagar.nourishnow.presentation.get_recipe.common.GetRecipeUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -155,7 +156,7 @@ data class GetRecipeUiState(
     val recipeDtoPost: RecipeDtoPost = RecipeDtoPost(),
     val canPostRecipe: Boolean = false,
     val hasError: Boolean = false,
-    val errorMessage: String = "No Error",
+    val errorMessage: String = "Unknown Error",
     val recipeDto: RecipeDto? = null,
     val isLoading: Boolean = false
 )
