@@ -18,6 +18,7 @@ data class RecipeOffline(
     val fatKcal: Double,
     val proteinKcal: Double,
     val carbohydrateKcal: Double,
+    val yield: Int
 ){
     fun toRecipe(
         ingredientItemList: List<IngredientItem>,
@@ -32,7 +33,8 @@ data class RecipeOffline(
             proteinKcal = proteinKcal,
             carbohydrateKcal = carbohydrateKcal,
             ingredients = ingredientItemList,
-            majorNutrients = majorNutrientList
+            majorNutrients = majorNutrientList,
+            yield = yield
         )
     }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.zip
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -26,30 +27,21 @@ class InitiateAppDetailsUseCase @Inject constructor(
         showLoading: () -> Unit,
         hideLoading:() -> Unit,
     ){
+        showLoading()
         recipeOfflineRepository.getCalorieStatsByDate(todayDate)
-            .buffer()
-            .onEach { resource ->
-                Log.d("TAG", resource.msg ?: "NULL")
-                handleCalorieStats(updateCalorieStats, todayDate, showLoading, hideLoading, resource)
-            }
-            .filter {
-                it is Resource.Success
-            }
-            .combine(
+            .filter { it !is  Resource.Loading }
+            .zip(
                 recipeOfflineRepository.getRecipeItemsByDate(todayDate)
                     .filter { it !is Resource.Loading }
             ){
                 calResource, recipeItemResource -> Pair(calResource, recipeItemResource)
-            }.combine(
+            }.zip(
                 recipeOfflineRepository.getNutrientKcalByDate(todayDate)
                     .filter { it !is Resource.Loading }
             ){
                 pair1, nutrientKcal -> Triple(pair1.first, pair1.second, nutrientKcal)
             }.collect{
-                Log.d("TAG", it.first.toString())
-                Log.d("TAG", it.second.toString())
-                Log.d("TAG", it.third.toString())
-                updateCalorieStats(Resource.Success(it.first.data!!.toCalorieStats()))
+                handleCalorieStats(updateCalorieStats, todayDate, it.first)
                 handleRecipeItems(it.second, addRecipes)
                 handleNutrientKcal(it.third, updateNutrientsKcal, todayDate)
                 hideLoading()
@@ -59,14 +51,9 @@ class InitiateAppDetailsUseCase @Inject constructor(
     private suspend fun handleCalorieStats(
         updateCalorieStats: (Resource<CalorieStats>) -> Unit,
         todayDate: LocalDate,
-        showLoading: () -> Unit,
-        hideLoading:() -> Unit,
         resource: Resource<CalorieStatsOffline>
     ){
         when(resource){
-            is Resource.Loading -> {
-                showLoading()
-            }
             is Resource.Error -> {
                 val newCalorieStats = CalorieStatsOffline(
                     date = todayDate,
@@ -76,7 +63,13 @@ class InitiateAppDetailsUseCase @Inject constructor(
                 )
                 recipeOfflineRepository.addCalorieStats(newCalorieStats)
                 updateCalorieStats(Resource.Success(newCalorieStats.toCalorieStats()))
-                hideLoading()
+            }
+            is Resource.Success -> {
+                if(resource.data != null) {
+                    updateCalorieStats(Resource.Success(resource.data.toCalorieStats()))
+                } else{
+                    updateCalorieStats(Resource.Error(resource.msg ?: "Unable to get Calorie Stats"))
+                }
             }
             else -> {
 

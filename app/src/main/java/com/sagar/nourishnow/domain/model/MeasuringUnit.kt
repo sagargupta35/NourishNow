@@ -12,10 +12,12 @@ enum class MeasuringUnit(val symbol: String, val conversionFactor: Double) {
     GRAMS("g", 1000.toDouble()),
     MG("mg", 1.toDouble()),
     MICROGRAMS("µg", 0.001),
-    NULL_UNIT("null", 0.0);
+    NULL_UNIT("∅", 0.0),
+    KCAL("kcal", 1.toDouble());
     companion object {
         fun convert(from: MeasuringUnit, to: MeasuringUnit): Pair<MeasuringUnit, Double>{
             if(to == NULL_UNIT || from == NULL_UNIT) return Pair(NULL_UNIT, 0.toDouble())
+            if(from == KCAL) return Pair(KCAL, 1.toDouble())
             return Pair(to, from.conversionFactor / to.conversionFactor)
         }
 

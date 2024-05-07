@@ -19,7 +19,8 @@ data class Recipe(
     val majorNutrients: List<MajorNutrient>,
     val ingredients: List<IngredientItem>,
     val date: LocalDate,
-    val recipeId: Long
+    val recipeId: Long,
+    val yield: Int
 ){
     fun toRecipeOffline(): RecipeOffline{
         return RecipeOffline(
@@ -28,6 +29,7 @@ data class Recipe(
             proteinKcal = proteinKcal,
             carbohydrateKcal = carbohydrateKcal,
             date = date,
+            yield = yield
         )
     }
 }

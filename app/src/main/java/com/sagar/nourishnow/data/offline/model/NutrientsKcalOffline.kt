@@ -9,14 +9,7 @@ import java.util.Date
 
 // this class is used to store the food consumed by the user in the past days
 
-@Entity(tableName = "NutrientsKcalOffline",
-    foreignKeys = [ForeignKey(
-        entity = CalorieStatsOffline::class,
-        parentColumns = ["date"],
-        childColumns = ["date"],
-        onUpdate = ForeignKey.CASCADE,
-        onDelete = ForeignKey.CASCADE
-    )])
+@Entity(tableName = "NutrientsKcalOffline")
 data class NutrientsKcalOffline (
     @PrimaryKey(autoGenerate = false)
     val date: LocalDate,

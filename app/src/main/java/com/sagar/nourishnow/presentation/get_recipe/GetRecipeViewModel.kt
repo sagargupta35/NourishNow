@@ -73,7 +73,6 @@ class GetRecipeViewModel @Inject constructor(
     }
 
     private fun getRecipe(){
-        Log.d("TAG", "Inside Get Recipe")
         if(getRecipeUiState.value.canGetRecipe){
             val queryMap = mapOf(
                 "app_id" to Constants.appId,
@@ -85,7 +84,6 @@ class GetRecipeViewModel @Inject constructor(
                 Log.d("TAG", "Inside ViewModel Scope")
                 recipeRemoteRepository.getIngredientNutrition(queryMap)
                     .onEach { resource ->
-                        Log.d("TAG", resource.toString())
                         updateUiState(resource)
                     }.collect()
             }

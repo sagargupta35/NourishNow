@@ -1,5 +1,6 @@
 package com.sagar.nourishnow.presentation.home_screen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,12 +26,12 @@ class HomeScreenViewModel @Inject constructor(
     init{
         viewModelScope.launch {
             initiateAppDetailsUseCase.initiateApp(
-                {},
-                {},
-                {},
+                { Log.d("TAG", "CalorieStats: ${it.data}")},
+                {Log.d("TAG", "NutrientKcal: ${it.data}")},
+                {Log.d("TAG", "RecipeResource: ${it.data}")},
                 LocalDate.now(),
-                {},
-                {}
+                {Log.d("TAG", "Loading")},
+                {Log.d("TAG", "Stopped Loading")}
             )
         }
     }
@@ -87,5 +88,4 @@ data class HomeScreenUiState(
         fat = 0.0,
         protein = 0.0
     ),
-
 )

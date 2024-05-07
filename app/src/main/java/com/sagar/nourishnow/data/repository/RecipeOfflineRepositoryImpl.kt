@@ -82,7 +82,8 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
 
     private suspend fun addIngredients(
         ingredients: List<IngredientDto>,
-        recipeId: Long): List<IngredientItem>{
+        recipeId: Long
+    ): List<IngredientItem>{
         val ingredientItemList = mutableListOf<IngredientItem>()
         ingredients.forEach { ingredientDto ->
             val lipidFatDto = ingredientDto.nutrientInformation?.get(0)?.nutrients?.get("FAPU")
@@ -130,12 +131,14 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
         name: String
     ) = flow {
             emit(Resource.Loading("Adding your Recipe\uD83E\uDD24")) //tasty emoji
+        try {
             val recipeOffline = RecipeOffline(
                 date = date,
                 name = name,
                 fatKcal = recipeDto.nutrientsKcal?.fat?.quantity ?: 0.0,
                 carbohydrateKcal = recipeDto.nutrientsKcal?.carbohydrate?.quantity ?: 0.0,
-                proteinKcal = recipeDto.nutrientsKcal?.protein?.quantity ?: 0.0
+                proteinKcal = recipeDto.nutrientsKcal?.protein?.quantity ?: 0.0,
+                yield = recipeDto.yield ?: 0
             )
             val savedRecipeOfflineId = recipeDao.addRecipe(recipeOffline)
             val majorNutrientList =
@@ -146,7 +149,7 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
             val savedRecipe =
                 recipeOffline.toRecipe(ingredientItemList, majorNutrientList, savedRecipeOfflineId)
 
-            val recipeItemOffline  = RecipeItemOffline(
+            val recipeItemOffline = RecipeItemOffline(
                 recipeId = savedRecipeOfflineId,
                 name = name,
                 date = date
@@ -154,8 +157,9 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
 
             recipeDao.addRecipeItemOffline(recipeItemOffline)
             emit(Resource.Success(savedRecipe))
-    }.catch {
-        emit(Resource.Error(it.localizedMessage ?: "Unknown error"))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage ?: "Recipes couldn't be fetched"))
+        }
     }
 
     override suspend fun deleteRecipe(recipeId: Long) = recipeDao.deleteRecipe(recipeId)
@@ -192,59 +196,69 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
 
     override fun getIngredientById(ingredientId: Long): Flow<Resource<Ingredient>> = flow {
         emit(Resource.Loading())
-        val majorNutrients = getMajorNutrientByFoodId(ingredientId, isRecipeId = false)
-        val ingredientOffline = recipeDao.getIngredientById(ingredientId)
-        emit(Resource.Success(ingredientOffline.toIngredient(majorNutrients)))
-    }.catch {
-        emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+        try {
+            val majorNutrients = getMajorNutrientByFoodId(ingredientId, isRecipeId = false)
+            val ingredientOffline = recipeDao.getIngredientById(ingredientId)
+            emit(Resource.Success(ingredientOffline.toIngredient(majorNutrients)))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "Ingredient couldn't be fetched"))
+        }
     }
 
     override fun getRecipeById(recipeId: Long): Flow<Resource<Recipe>> = flow {
         emit(Resource.Loading())
-        val majorNutrients = getMajorNutrientByFoodId(recipeId, true)
-        val ingredientItems = getIngredientItemsByRecipeId(recipeId)
-        val recipeOffline = recipeDao.getRecipeById(recipeId)
-        emit(
-            Resource.Success(
-                recipeOffline.toRecipe(
-                    ingredientItems,
-                    majorNutrients,
-                    recipeOffline.recipeId
+        try {
+            val majorNutrients = getMajorNutrientByFoodId(recipeId, true)
+            val ingredientItems = getIngredientItemsByRecipeId(recipeId)
+            val recipeOffline = recipeDao.getRecipeById(recipeId)
+            emit(
+                Resource.Success(
+                    recipeOffline.toRecipe(
+                        ingredientItems,
+                        majorNutrients,
+                        recipeOffline.recipeId
+                    )
                 )
             )
-        )
-    }.catch {
-        emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "Recipe couldn't be fetched"))
+        }
     }
 
     override fun getCalorieStatsByDate(date: LocalDate): Flow<Resource<CalorieStatsOffline>> = flow {
         emit(Resource.Loading())
-        val calorieStatsOffline = recipeDao.getCalorieStatsByDate(date)
-        if(calorieStatsOffline != null) {
-            emit(Resource.Success(calorieStatsOffline))
-        } else{
-            emit(Resource.Error("No items found for the given date"))
+        try {
+            val calorieStatsOffline = recipeDao.getCalorieStatsByDate(date)
+            if (calorieStatsOffline != null) {
+                emit(Resource.Success(calorieStatsOffline))
+            } else {
+                emit(Resource.Error("No items found for the given date"))
+            }
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "Stats do not exist for given date"))
         }
-    }.catch { e ->
-        emit(Resource.Error(msg = e.localizedMessage?: "Stats do not exist for given date"))
     }
 
     override fun getNutrientKcalByDate(date: LocalDate): Flow<Resource<NutrientsKcalOffline>> = flow {
         emit(Resource.Loading())
-        val nutrientsKcalOffline = recipeDao.getNutrientKcalByDate(date)
-        if(nutrientsKcalOffline != null) {
-            emit(Resource.Success(nutrientsKcalOffline))
-        } else emit(Resource.Error("No items found for the given date"))
-    }.catch { e ->
-        emit(Resource.Error(msg = e.localizedMessage?: "Stats do not exist for given date"))
+        try {
+            val nutrientsKcalOffline = recipeDao.getNutrientKcalByDate(date)
+            if (nutrientsKcalOffline != null) {
+                emit(Resource.Success(nutrientsKcalOffline))
+            } else emit(Resource.Error("No items found for the given date"))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "No items found for the given date"))
+        }
     }
 
     override fun getRecipeItemsByDate(date: LocalDate): Flow<Resource<List<RecipeItem>>> = flow {
         emit(Resource.Loading())
-        val recipeOfflineItems = recipeDao.getAllRecipeItems(date)
-        emit(Resource.Success(recipeOfflineItems.map { it.toRecipeItem() }))
-    }.catch {
-        emit(Resource.Error(msg = it.localizedMessage ?: "Unknown Error fetching recipe items"))
+        try {
+            val recipeOfflineItems = recipeDao.getAllRecipeItems(date)
+            emit(Resource.Success(recipeOfflineItems.map { it.toRecipeItem() }))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "No items found for the given date"))
+        }
     }
 
     override suspend fun updateNutrientsKcal(nutrientsKcal: NutrientsKcal) =
