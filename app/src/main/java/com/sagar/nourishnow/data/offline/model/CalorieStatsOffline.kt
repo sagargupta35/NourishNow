@@ -13,10 +13,12 @@ data class CalorieStatsOffline(
     val date: LocalDate,
     val calorieLimit: Int,
     val caloriesConsumed: Int,
+    val caloriesRemaining: Int
 ){
     fun toCalorieStats(): CalorieStats = CalorieStats(
         date = date,
         calorieLimit = calorieLimit,
-        caloriesConsumed = caloriesConsumed
+        caloriesConsumed = caloriesConsumed,
+        caloriesRemaining = caloriesRemaining
     )
 }

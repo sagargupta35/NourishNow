@@ -30,6 +30,10 @@ interface RecipeOfflineRepository {
 
     suspend fun deleteRecipe(recipeId: Long)
 
+    suspend fun addCalorieStats(calorieStatsOffline: CalorieStatsOffline)
+
+    suspend fun addNutrientsKcal(nutrientsKcalOffline: NutrientsKcalOffline)
+
     fun getIngredientById(ingredientId: Long): Flow<Resource<Ingredient>>
 
     fun getRecipeById(recipeId: Long): Flow<Resource<Recipe>>
@@ -43,4 +47,5 @@ interface RecipeOfflineRepository {
     suspend fun updateNutrientsKcal(nutrientsKcal: NutrientsKcal)
 
     suspend fun updateCalorieStats(calorieStats: CalorieStats)
+
 }

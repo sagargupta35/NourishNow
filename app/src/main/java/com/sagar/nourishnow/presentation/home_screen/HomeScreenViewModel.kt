@@ -4,19 +4,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
+import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
-
-class HomeScreenViewModel: ViewModel() {
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
+    private val initiateAppDetailsUseCase: InitiateAppDetailsUseCase
+): ViewModel() {
 
     var _homeScreenUiState by mutableStateOf(HomeScreenUiState())
         private set
 
     init{
-
+        viewModelScope.launch {
+            initiateAppDetailsUseCase.initiateApp(
+                {},
+                {},
+                {},
+                LocalDate.now(),
+                {},
+                {}
+            )
+        }
     }
 
     fun uiEvent(event: HomeScreenUiEvent){
@@ -62,6 +78,7 @@ data class HomeScreenUiState(
         date = LocalDate.now(),
         calorieLimit = 2000,
         caloriesConsumed = 0,
+        caloriesRemaining = 0
     ),
     val nutrientsKcal: NutrientsKcal = NutrientsKcal(
         date = LocalDate.now(),

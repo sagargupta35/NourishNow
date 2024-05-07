@@ -22,29 +22,29 @@ import java.util.Date
 
 @Dao
 interface RecipeDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addNutrient(nutrientOffline: NutrientOffline): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addRecipeItemOffline(recipeItem: RecipeItemOffline)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMajorNutrient(majorNutrientOffline: MajorNutrientOffline): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addIngredient(ingredientOffline: IngredientOffline): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addIngredientItem(ingredientItemOffline: IngredientItemOffline): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addRecipe(recipeOffline: RecipeOffline): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCalorieStats(calorieStatsOffline: CalorieStatsOffline)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNutrientsKcal(nutrientOffline: NutrientOffline: NutrientsKcalOffline)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addNutrientsKcal(nutrientsKcalOffline: NutrientsKcalOffline)
 
     @Query("SELECT * FROM RecipeItemOffline WHERE date = :date")
     suspend fun getAllRecipeItems(date: LocalDate): List<RecipeItemOffline>

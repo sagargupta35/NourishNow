@@ -159,6 +159,13 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteRecipe(recipeId: Long) = recipeDao.deleteRecipe(recipeId)
+    override suspend fun addCalorieStats(calorieStatsOffline: CalorieStatsOffline) {
+        recipeDao.addCalorieStats(calorieStatsOffline)
+    }
+
+    override suspend fun addNutrientsKcal(nutrientsKcalOffline: NutrientsKcalOffline) {
+        recipeDao.addNutrientsKcal(nutrientsKcalOffline)
+    }
 
     private suspend fun getMajorNutrientByFoodId(foodId: Long, isRecipeId: Boolean): List<MajorNutrient> {
         val majorNutrients = mutableListOf<MajorNutrient>()
@@ -227,7 +234,7 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
         val nutrientsKcalOffline = recipeDao.getNutrientKcalByDate(date)
         if(nutrientsKcalOffline != null) {
             emit(Resource.Success(nutrientsKcalOffline))
-        } else emit(Resource.Error("Not items found for the given date"))
+        } else emit(Resource.Error("No items found for the given date"))
     }.catch { e ->
         emit(Resource.Error(msg = e.localizedMessage?: "Stats do not exist for given date"))
     }

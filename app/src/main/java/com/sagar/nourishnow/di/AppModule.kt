@@ -7,7 +7,10 @@ import com.sagar.nourishnow.data.offline.RecipeDatabase
 import com.sagar.nourishnow.domain.remote.EdamamApi
 import com.sagar.nourishnow.data.repository.RecipeRemoteRepositoryImpl
 import com.sagar.nourishnow.data.offline.RecipeDao
+import com.sagar.nourishnow.data.repository.RecipeOfflineRepositoryImpl
+import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
+import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -61,8 +64,23 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideInitiateAppDetailsUseCase(
+        @ApplicationContext context: Context
+    ): InitiateAppDetailsUseCase {
+        return InitiateAppDetailsUseCase(provideRecipeOfflineRepository(context))
+    }
+
+
+    @Provides
+    @Singleton
     fun provideRecipeRepository(): RecipeRemoteRepository {
         return RecipeRemoteRepositoryImpl(provideEdamamApi())
+    }
+
+    @Singleton
+    @Provides
+    fun provideRecipeOfflineRepository(@ApplicationContext context: Context): RecipeOfflineRepository {
+        return RecipeOfflineRepositoryImpl(provideRecipeDao(context))
     }
 
 }
