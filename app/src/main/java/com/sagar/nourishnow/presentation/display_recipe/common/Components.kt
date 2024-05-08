@@ -53,12 +53,14 @@ fun NutrientRow(
             Text(
                 text = name,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = Color.Black
             )
             Text(
                 text = "${DecimalFormat("#.##").format(quantity)} ${unit.symbol}",
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = Color.Black
             )
         }
     }
@@ -115,7 +117,8 @@ fun MajorNutrientColumn(
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(text = majorNutrient.name,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
             }
         }
@@ -145,7 +148,7 @@ fun MajorNutrientColumn(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun RecipeNutritionCard(
     amountPerServing: String? = "3",
@@ -283,12 +286,15 @@ fun RecipeNutritionCard(
     )
 ) {
     Card(
-        shape = RoundedCornerShape(4.dp),
-        colors = CardDefaults.cardColors(Color.White)
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(Color.White),
+        elevation = CardDefaults.cardElevation(12.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(vertical = 16.dp,
+                    horizontal = 8.dp
+                )
         ) {
             Spacer(modifier = Modifier.height(40.dp))
             Column {
@@ -300,7 +306,8 @@ fun RecipeNutritionCard(
                     Text(
                         text = "Nutrition Facts",
                         fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
@@ -320,12 +327,14 @@ fun RecipeNutritionCard(
                         Text(
                             text = "Amount Per Serving",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            color = Color.Black
                         )
                         Text(
                             text = amountPerServing,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                            fontSize = 20.sp,
+                            color = Color.Black
                         )
                     }
                 }
@@ -337,12 +346,14 @@ fun RecipeNutritionCard(
                     Text(
                         text = "Calories",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp
+                        fontSize = 40.sp,
+                        color = Color.Black
                     )
                     Text(
                         text = "$calories",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp
+                        fontSize = 40.sp,
+                        color = Color.Black
                     )
                 }
                 Spacer(
@@ -363,7 +374,7 @@ fun RecipeNutritionCard(
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun IngredientItemCard(
     onClick: (Long) -> Unit = {},
@@ -374,8 +385,10 @@ fun IngredientItemCard(
     )
 ) {
     Card(
-        colors = CardDefaults.cardColors(Color.LightGray),
-        shape = RoundedCornerShape(4.dp)
+        colors = CardDefaults.cardColors(Color(0xFFDDDDDD)),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier
+            .clickable { onClick(ingredientItem.ingredientId) }
     ) {
         Row(
             modifier = Modifier
@@ -383,18 +396,19 @@ fun IngredientItemCard(
                 .padding(
                     horizontal = 16.dp,
                     vertical = 8.dp
-                )
-                .clickable { onClick(ingredientItem.ingredientId) },
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = ingredientItem.name,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = Color.Black
             )
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "Navigate to ingredient description screen"
+                contentDescription = "Navigate to ingredient description screen",
+                tint = Color.Black
             )
         }
     }

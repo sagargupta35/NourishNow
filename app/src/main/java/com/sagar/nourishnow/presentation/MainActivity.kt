@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sagar.nourishnow.presentation.display_recipe.DisplayRecipeScreen
 import com.sagar.nourishnow.presentation.get_recipe.GetRecipeViewModel
 import com.sagar.nourishnow.presentation.get_recipe.PostRecipeScreen
 import com.sagar.nourishnow.presentation.home_screen.HomeScreen
@@ -46,10 +47,11 @@ class MainActivity : ComponentActivity() {
 //                            viewModel.uiEvent(HomeScreenUiEvent.CancelGetRecipeByName)
 //                        }
 //                    )
-                    PostRecipeScreen(
-                        getRecipeUiState = viewModel.getRecipeUiState.value,
-                        onEvent = viewModel::uiEvent,
-                    )
+//                    PostRecipeScreen(
+//                        getRecipeUiState = viewModel.getRecipeUiState.value,
+//                        onEvent = viewModel::uiEvent,
+//                    )
+                    DisplayRecipeScreen()
                 }
             }
         }

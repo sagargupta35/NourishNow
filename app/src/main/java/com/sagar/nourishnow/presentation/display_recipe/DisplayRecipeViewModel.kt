@@ -25,10 +25,12 @@ class DisplayRecipeViewModel @Inject constructor(
         displayRecipeUiState = displayRecipeUiState.copy(isLoading = false)
     }
 
-    fun updateRecipe(
-        recipe: Recipe?
-    ){
-        displayRecipeUiState = displayRecipeUiState.copy(recipe = recipe)
+    fun showDisplayRecipeDialogueBox(){
+        displayRecipeUiState = displayRecipeUiState.copy(showDeleteRecipeDialogueBox = true)
+    }
+
+    fun hideDisplayRecipeDialogueBox(){
+        displayRecipeUiState = displayRecipeUiState.copy(showDeleteRecipeDialogueBox = false)
     }
 
     fun clearUiState(){
@@ -39,5 +41,5 @@ class DisplayRecipeViewModel @Inject constructor(
 
 data class DisplayRecipeUiState(
     val isLoading: Boolean = false,
-    val recipe: Recipe? = null,
+    val showDeleteRecipeDialogueBox: Boolean = false
 )
