@@ -5,6 +5,7 @@ import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
 import com.sagar.nourishnow.domain.model.Recipe
+import com.sagar.nourishnow.domain.model.RecipeItem
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import kotlinx.coroutines.flow.filter
@@ -22,14 +23,13 @@ class AddRecipeUseCase @Inject constructor(
         updateRecipe: (Recipe?) -> Unit,
         updateCalorieStats:(CalorieStats) -> Unit,
         updateNutrientsKcal:(NutrientsKcal) -> Unit,
-        showLoading: () -> Unit,
+        addRecipeItems: (RecipeItem) -> Unit,
         hideLoading: () -> Unit,
     ){
         if(recipeDto == null){
             updateRecipe(null)
             hideLoading()
         } else{
-            showLoading()
             recipeOfflineRepository.addRecipe(
                 date = date,
                 name = recipeName,
@@ -70,6 +70,13 @@ class AddRecipeUseCase @Inject constructor(
                             fatKcal = recipeResource.data.fatKcal,
                             proteinKcal = recipeResource.data.proteinKcal,
                             carbohydrateKcal = recipeResource.data.carbohydrateKcal,
+                        )
+                        addRecipeItems(
+                            RecipeItem(
+                                recipeResource.data.name,
+                                recipeResource.data.recipeId,
+                                date
+                            )
                         )
                         hideLoading()
                     } else{

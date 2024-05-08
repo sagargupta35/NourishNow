@@ -1,39 +1,39 @@
 package com.sagar.nourishnow.presentation.get_recipe.use_case
 
 import android.util.Log
-import com.sagar.nourishnow.common.Constants
 import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
+import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
 import javax.inject.Inject
 
-class GetRecipeByNameUseCase @Inject constructor(
+class GetRecipeByDtoUseCase @Inject constructor(
     private val recipeRemoteRepository: RecipeRemoteRepository
-){
-    suspend fun getRecipeByName(
-        name: String,
+) {
+
+    suspend fun getRecipeByDtoUseCase(
+        recipePostDto: RecipeDtoPost,
         addRecipe: (RecipeDto?) -> Unit,
-        showLoading: () -> Unit
+        showLoading: () -> Unit,
     ){
         val queryMap = mapOf(
             "app_id" to "764ac739",
             "app_key" to "8a441fd527278dd8472e08092b2ab396",
-            "nutrition-type" to "cooking",
-            "ingr" to name
         )
-        recipeRemoteRepository.getIngredientNutrition(
-            queryMap
+        recipeRemoteRepository.getRecipeNutrition(
+            queryMap,
+            recipePostDto
         ).collect{resource ->
             when(resource){
                 is Resource.Loading -> {
                     showLoading()
                 }
-                is Resource.Error -> {
-                    addRecipe(null)
-                    Log.d("TAG", resource.msg ?: "Unknown error fetching recipe")
-                }
                 is Resource.Success -> {
                     addRecipe(resource.data)
+                }
+                is Resource.Error -> {
+                    addRecipe(null)
+                    Log.d("TAG", resource.msg ?: "Unknown error fetching recipe in GetRecipeByDtoUseCase")
                 }
             }
         }

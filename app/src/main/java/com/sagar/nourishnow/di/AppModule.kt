@@ -10,6 +10,7 @@ import com.sagar.nourishnow.data.offline.RecipeDao
 import com.sagar.nourishnow.data.repository.RecipeOfflineRepositoryImpl
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
+import com.sagar.nourishnow.presentation.display_recipe.use_case.AddRecipeUseCase
 import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
 import com.squareup.moshi.Moshi
 import dagger.Module
@@ -81,6 +82,12 @@ object AppModule {
     @Provides
     fun provideRecipeOfflineRepository(@ApplicationContext context: Context): RecipeOfflineRepository {
         return RecipeOfflineRepositoryImpl(provideRecipeDao(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideAddRecipeUseCase(@ApplicationContext context: Context): AddRecipeUseCase{
+        return AddRecipeUseCase(provideRecipeOfflineRepository(context))
     }
 
 }

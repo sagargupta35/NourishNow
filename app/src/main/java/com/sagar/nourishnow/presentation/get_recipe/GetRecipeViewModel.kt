@@ -11,6 +11,8 @@ import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
 import com.sagar.nourishnow.presentation.get_recipe.common.GetRecipeUiEvent
+import com.sagar.nourishnow.presentation.get_recipe.use_case.GetRecipeByDtoUseCase
+import com.sagar.nourishnow.presentation.get_recipe.use_case.GetRecipeByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GetRecipeViewModel @Inject constructor(
-    private val recipeRemoteRepository: RecipeRemoteRepository
+    private val getRecipeByNameUseCase: GetRecipeByNameUseCase,
+    private val getRecipeByDtoUseCase: GetRecipeByDtoUseCase
 ): ViewModel() {
 
     private var _getRecipeUiState = mutableStateOf(GetRecipeUiState())
@@ -33,78 +36,126 @@ class GetRecipeViewModel @Inject constructor(
                     canGetRecipe = event.name.isNotBlank()
                 )
             }
+
             is GetRecipeUiEvent.RecipePostNameChange -> {
                 _getRecipeUiState.value = _getRecipeUiState.value.copy(
                     recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(title = event.name),
                     canPostRecipe = event.name.isNotBlank()
                 )
             }
+
             is GetRecipeUiEvent.AddIngredient -> {
                 _getRecipeUiState.value =
                     _getRecipeUiState.value.copy(
-                            recipeDtoPost =
-                            _getRecipeUiState.value.recipeDtoPost.copy(
-                                ingredients =
-                                _getRecipeUiState.value.recipeDtoPost.ingredients.plus(event.name)
-                    )       )
+                        recipeDtoPost =
+                        _getRecipeUiState.value.recipeDtoPost.copy(
+                            ingredients = if (getRecipeUiState.value.addIngredientDialogueBoxValue.isNotEmpty()) {
+                                _getRecipeUiState.value.recipeDtoPost.ingredients.plus(
+                                    getRecipeUiState.value.addIngredientDialogueBoxValue
+                                )
+                            } else _getRecipeUiState.value.recipeDtoPost.ingredients,
+                        ),
+                        addIngredientDialogueBoxValue = "",
+                        showAddIngredientDialogueBox = false,
+                    )
+
             }
+
+            is GetRecipeUiEvent.DeleteIngredient -> {
+                _getRecipeUiState.value =
+                    _getRecipeUiState.value.copy(
+                        recipeDtoPost =
+                        _getRecipeUiState.value.recipeDtoPost.copy(
+                            ingredients =
+                            _getRecipeUiState.value.recipeDtoPost.ingredients.minus(event.name)
+                        )
+                    )
+            }
+
             is GetRecipeUiEvent.SummaryChange -> {
-                _getRecipeUiState.value = _getRecipeUiState.value.copy(recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(summary = event.summary))
+                _getRecipeUiState.value =
+                    _getRecipeUiState.value.copy(
+                        recipeDtoPost =
+                        _getRecipeUiState.value.recipeDtoPost.copy(
+                            summary = event.summary
+                        )
+                    )
             }
+
             is GetRecipeUiEvent.YieldChange -> {
-                _getRecipeUiState.value = _getRecipeUiState.value.copy(recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(yield = event.yield))
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(yield = event.yield)
+                )
             }
+
             is GetRecipeUiEvent.TimeChange -> {
-                _getRecipeUiState.value = _getRecipeUiState.value.copy(recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(time = event.time))
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(time = event.time)
+                )
             }
+
             is GetRecipeUiEvent.PrepChange -> {
-                _getRecipeUiState.value = _getRecipeUiState.value.copy(recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(prep = event.prep))
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(prep = event.prep)
+                )
             }
+
             is GetRecipeUiEvent.GetRecipe -> {
-                getRecipe()
+                getRecipe(
+                    event.showLoading,
+                    event.addRecipe
+                )
             }
+
             is GetRecipeUiEvent.PostRecipe -> {
-                postRecipe()
+                postRecipe(
+                    showLoading = event.showLoading,
+                    addRecipe = event.addRecipe
+                )
             }
+
+            is GetRecipeUiEvent.ClearUiState -> {
+                clearUiState()
+            }
+
+            is GetRecipeUiEvent.AddIngredientDialogueBoxNameChange -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    addIngredientDialogueBoxValue = event.name
+                )
+            }
+
+            is GetRecipeUiEvent.CloseAddIngredientDialogueBox -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    addIngredientDialogueBoxValue = "",
+                    showAddIngredientDialogueBox = false
+                )
+            }
+
+            is GetRecipeUiEvent.ShowAddIngredientDialogueBox -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    showAddIngredientDialogueBox = true
+                )
+            }
+
             else -> {
 
             }
         }
     }
 
-    private fun getRecipe(){
-        if(getRecipeUiState.value.canGetRecipe){
-            val queryMap = mapOf(
-                "app_id" to Constants.appId,
-                "app_key" to Constants.appKey,
-                "nutrition-type" to "cooking",
-                "ingr" to getRecipeUiState.value.recipeName
-            )
+    private fun getRecipe(
+        showLoading: () -> Unit,
+        addRecipe: (RecipeDto?) -> Unit
+    ) {
+        if (getRecipeUiState.value.canGetRecipe) {
             viewModelScope.launch {
-                Log.d("TAG", "Inside ViewModel Scope")
-                recipeRemoteRepository.getIngredientNutrition(queryMap)
-                    .onEach { resource ->
-                        updateUiState(resource)
-                    }.collect()
+                getRecipeByNameUseCase.getRecipeByName(
+                    showLoading = showLoading,
+                    addRecipe = addRecipe,
+                    name = getRecipeUiState.value.recipeName
+                )
             }
-        } else{
-            _getRecipeUiState.value = _getRecipeUiState.value.copy(hasError = true, errorMessage = "Recipe Name is required")
-        }
-    }
-
-    private fun postRecipe(){
-        if(getRecipeUiState.value.canPostRecipe){
-            val queryMap = mapOf(
-                "app_id" to Constants.appId,
-                "app_key" to Constants.appKey,
-            )
-            viewModelScope.launch {
-                recipeRemoteRepository.getRecipeNutrition(queryMap, getRecipeUiState.value.recipeDtoPost)
-                    .onEach {resource ->
-                        updateUiState(resource)
-                    }
-            }
-        } else{
+        } else {
             _getRecipeUiState.value = _getRecipeUiState.value.copy(
                 hasError = true,
                 errorMessage = "Recipe Name is required"
@@ -112,37 +163,27 @@ class GetRecipeViewModel @Inject constructor(
         }
     }
 
-    private fun updateUiState(resource: Resource<RecipeDto>){
-        when(resource){
-            is Resource.Loading -> {
-                if(!_getRecipeUiState.value.isLoading){
-                    Log.d("TAG", "Updating loading to true")
-                    _getRecipeUiState.value = _getRecipeUiState.value.copy(isLoading = true)
-                }
-            }
-            is Resource.Success -> {
-                if(_getRecipeUiState.value.isLoading){
-                    _getRecipeUiState.value = _getRecipeUiState.value.copy(isLoading = false)
-                }
-                if(resource.data!= null){
-                    _getRecipeUiState.value = _getRecipeUiState.value.copy(recipeDto = resource.data)
-                } else{
-                    _getRecipeUiState.value = _getRecipeUiState.value.copy(hasError = true, errorMessage = "No Recipe Found")
-                }
-            }
-            is Resource.Error -> {
-                if(_getRecipeUiState.value.isLoading){
-                    _getRecipeUiState.value = _getRecipeUiState.value.copy(isLoading = false)
-                }
-                _getRecipeUiState.value = _getRecipeUiState.value.copy(
-                    hasError = true,
-                    errorMessage = resource.msg ?: "Unknown Error Fetching the recipe\uD83D\uDE1E" // sad emoji
+    private fun postRecipe(
+        showLoading: () -> Unit,
+        addRecipe: (RecipeDto?) -> Unit
+    ) {
+        if (getRecipeUiState.value.canPostRecipe) {
+            viewModelScope.launch {
+                getRecipeByDtoUseCase.getRecipeByDtoUseCase(
+                    showLoading = showLoading,
+                    addRecipe = addRecipe,
+                    recipePostDto = getRecipeUiState.value.recipeDtoPost
                 )
             }
+        } else {
+            _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                hasError = true,
+                errorMessage = "Recipe Name is required"
+            )
         }
     }
 
-    fun clearUiState(){
+    private fun clearUiState() {
         _getRecipeUiState.value = GetRecipeUiState()
     }
 
@@ -155,6 +196,7 @@ data class GetRecipeUiState(
     val canPostRecipe: Boolean = false,
     val hasError: Boolean = false,
     val errorMessage: String = "Unknown Error",
-    val recipeDto: RecipeDto? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val showAddIngredientDialogueBox: Boolean = false,
+    val addIngredientDialogueBoxValue: String = ""
 )
