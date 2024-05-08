@@ -1,11 +1,10 @@
-package com.sagar.nourishnow.presentation.display_recipe.use_case
+package com.sagar.nourishnow.presentation.get_recipe.use_case
 
 import android.util.Log
 import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
 import com.sagar.nourishnow.domain.model.Recipe
-import com.sagar.nourishnow.domain.model.RecipeItem
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import kotlinx.coroutines.flow.filter
@@ -20,15 +19,10 @@ class AddRecipeUseCase @Inject constructor(
         recipeDto: RecipeDto?,
         recipeName: String,
         date: LocalDate,
-        updateRecipe: (Recipe?) -> Unit,
-        updateCalorieStats:(CalorieStats) -> Unit,
-        updateNutrientsKcal:(NutrientsKcal) -> Unit,
-        addRecipeItems: (RecipeItem) -> Unit,
-        hideLoading: () -> Unit,
+        updateRecipe: (Resource<Recipe>) -> Unit,
     ){
         if(recipeDto == null){
-            updateRecipe(null)
-            hideLoading()
+            updateRecipe(Resource.Error("Unable to save Recipe"))
         } else{
             recipeOfflineRepository.addRecipe(
                 date = date,
@@ -56,43 +50,30 @@ class AddRecipeUseCase @Inject constructor(
                 val nutrientKcalResource = it.third
                 if(recipeResource is Resource.Success && calorieStatsResource is Resource.Success && nutrientKcalResource is Resource.Success){
                     if(recipeResource.data != null && calorieStatsResource.data != null && nutrientKcalResource.data != null){
-                        updateRecipe(recipeResource.data)
+                        updateRecipe(recipeResource)
                         updateCalorieStats(
-                            updateCalorieStats = updateCalorieStats,
                             calorieStats = calorieStatsResource.data.toCalorieStats(),
                             date = date,
                             calories = (recipeResource.data.carbohydrateKcal + recipeResource.data.fatKcal + recipeResource.data.proteinKcal).toInt()
                         )
                         updateNutrientsKcal(
-                            updateNutrientsKcal = updateNutrientsKcal,
                             nutrientsKcal = nutrientKcalResource.data.toNutrientsKcal(),
                             date = date,
                             fatKcal = recipeResource.data.fatKcal,
                             proteinKcal = recipeResource.data.proteinKcal,
                             carbohydrateKcal = recipeResource.data.carbohydrateKcal,
                         )
-                        addRecipeItems(
-                            RecipeItem(
-                                recipeResource.data.name,
-                                recipeResource.data.recipeId,
-                                date
-                            )
-                        )
-                        hideLoading()
                     } else{
-                        updateRecipe(null)
-                        hideLoading()
+                        updateRecipe(recipeResource)
                     }
                 } else{
-                    updateRecipe(null)
-                    hideLoading()
+                    updateRecipe(recipeResource)
                 }
             }
         }
     }
 
     private suspend fun updateCalorieStats(
-        updateCalorieStats:(CalorieStats) -> Unit,
         calorieStats: CalorieStats,
         date: LocalDate,
         calories: Int
@@ -105,14 +86,12 @@ class AddRecipeUseCase @Inject constructor(
                 caloriesRemaining = (calorieStats.caloriesRemaining - calories).coerceAtLeast(0)
             )
             recipeOfflineRepository.updateCalorieStats(updatedCalorieStats)
-            updateCalorieStats(updatedCalorieStats)
         } catch (e: Exception){
             Log.d("TAG", e.localizedMessage ?: "Unknown error fetching calorie stats in add recipe use case")
         }
     }
 
     private suspend fun updateNutrientsKcal(
-        updateNutrientsKcal:(NutrientsKcal) -> Unit,
         nutrientsKcal: NutrientsKcal,
         date: LocalDate,
         carbohydrateKcal: Double,
@@ -128,7 +107,6 @@ class AddRecipeUseCase @Inject constructor(
                 date = date
             )
             recipeOfflineRepository.updateNutrientsKcal(updatedNutrientsKcal)
-            updateNutrientsKcal(updatedNutrientsKcal)
         } catch (e: Exception){
             Log.d("TAG", e.localizedMessage ?: "Unknown error fetching calorie stats in add recipe use case")
         }

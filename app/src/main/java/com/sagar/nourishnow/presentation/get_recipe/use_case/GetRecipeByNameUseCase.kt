@@ -12,7 +12,7 @@ class GetRecipeByNameUseCase @Inject constructor(
 ){
     suspend fun getRecipeByName(
         name: String,
-        addRecipe: (RecipeDto?) -> Unit,
+        addRecipe: (Resource<RecipeDto>) -> Unit,
         showLoading: () -> Unit
     ){
         val queryMap = mapOf(
@@ -29,11 +29,11 @@ class GetRecipeByNameUseCase @Inject constructor(
                     showLoading()
                 }
                 is Resource.Error -> {
-                    addRecipe(null)
+                    addRecipe(resource)
                     Log.d("TAG", resource.msg ?: "Unknown error fetching recipe")
                 }
                 is Resource.Success -> {
-                    addRecipe(resource.data)
+                    addRecipe(resource)
                 }
             }
         }

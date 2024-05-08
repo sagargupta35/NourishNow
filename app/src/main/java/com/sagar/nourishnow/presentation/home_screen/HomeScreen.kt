@@ -13,22 +13,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sagar.nourishnow.presentation.home_screen.common.AddRecipeDialogueBox
+import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
 import com.sagar.nourishnow.presentation.home_screen.common.RecipeNameAlertBox
 
 @Composable
 fun HomeScreen(
-    addRecipeClick: () -> Unit,
-    closeRecipeClick: () -> Unit,
-    homeScreenUiState: HomeScreenUiState,
-    updateRecipeName: (String) -> Unit,
-    onGetRecipeClick: () -> Unit,
-    onCancelGetRecipeByName: () -> Unit
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    homeScreenUiState: HomeScreenUiState = viewModel.homeScreenUiState,
+    onPostRecipeClick:() -> Unit,
 ) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = addRecipeClick,
+                onClick = {
+                    viewModel.uiEvent(HomeScreenUiEvent.AddRecipeClick)
+                },
                 contentColor = Color.White,
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
                 modifier = Modifier.padding(16.dp)
@@ -47,17 +48,31 @@ fun HomeScreen(
         ) {
             if(homeScreenUiState.openAddRecipeDialogue) {
                 AddRecipeDialogueBox(
-                    onDismissRequest = closeRecipeClick,
+                    onDismissRequest = {
+                        viewModel.uiEvent(HomeScreenUiEvent.CloseAddRecipeDialogue)
+                    },
                     height = 250,
-                    onGetRecipeClick = onGetRecipeClick
+                    onGetRecipeClick = {
+                        viewModel.uiEvent(HomeScreenUiEvent.GetRecipeByNameClick)
+                    },
+                    onPostRecipeClick = {
+                        viewModel.uiEvent(HomeScreenUiEvent.CloseAddRecipeDialogue)
+                        onPostRecipeClick()
+                    }
                 )
             } else if(homeScreenUiState.openGetRecipeDialogueBox){
                 RecipeNameAlertBox(
-                    updateRecipeName = updateRecipeName,
+                    updateRecipeName = {
+                        viewModel.uiEvent(HomeScreenUiEvent.UpdateRecipeName(it))
+                    },
                     height = 300,
-                    getRecipeClick = {  },
+                    getRecipeClick = {
+
+                    },
                     recipeName = homeScreenUiState.recipeName,
-                    onDismissRequest = onCancelGetRecipeByName
+                    onDismissRequest = {
+                        viewModel.uiEvent(HomeScreenUiEvent.CancelGetRecipeByName)
+                    }
                 )
             }
         }

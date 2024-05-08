@@ -22,48 +22,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sagar.nourishnow.domain.model.IngredientItem
 import com.sagar.nourishnow.domain.model.MajorNutrient
 import com.sagar.nourishnow.presentation.display_recipe.common.IngredientItemCard
 import com.sagar.nourishnow.presentation.display_recipe.common.RecipeNutritionCard
 
 
-@Preview(showBackground = true)
 @Composable
 fun DisplayRecipeScreen(
-    name: String = "Vegetable Rice",
-    recipeId: Long? = null,
+    displayRecipeViewModel: DisplayRecipeViewModel = hiltViewModel(),
+    displayRecipeUiState: DisplayRecipeUiState = displayRecipeViewModel.displayRecipeUiState,
+    navigateOnError: () -> Unit,
     onIngredientClick: (Long) -> Unit = {},
-    majorNutrientList: List<MajorNutrient> = listOf(),
-    calories: Int = 1773,
-    ingredientItemList: List<IngredientItem>? = listOf(
-        IngredientItem(
-            ingredientId = 0,
-            name = "Dal Rice 100g",
-            recipeId = 0
-        ),
-        IngredientItem(
-            ingredientId = 0,
-            name = "Dal Rice 100g",
-            recipeId = 0
-        ),
-        IngredientItem(
-            ingredientId = 0,
-            name = "Dal Rice 100g",
-            recipeId = 0
-        ),
-        IngredientItem(
-            ingredientId = 0,
-            name = "Dal Rice 100g",
-            recipeId = 0
-        )
-    ),
-    amountPerServing: Int = 3,
-    onDeleteClick: (Long) -> Unit = {},
-    cancelDeleteClick: () -> Unit = {},
-    displayRecipeUiState: DisplayRecipeUiState = DisplayRecipeUiState(),
-    showDeleteDialogueBoxClick: () -> Unit = {}
-) { 
+) {
+    if(displayRecipeUiState.hasError){
+        displayRecipeViewModel.clearUiState()
+        navigateOnError()
+    }
     Box(modifier = Modifier.fillMaxSize()){
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -71,11 +47,16 @@ fun DisplayRecipeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if(displayRecipeUiState.showDeleteRecipeDialogueBox &&
-                !displayRecipeUiState.isLoading){
+                !displayRecipeUiState.isLoading &&
+                displayRecipeUiState.recipeId != null){
                 DeleteRecipeDialogueBox(
-                    onCancelClick = cancelDeleteClick,
-                    onDeleteClick = onDeleteClick,
-                    recipeId = recipeId ?: 0
+                    onCancelClick = {
+                        displayRecipeViewModel.hideDisplayRecipeDialogueBox()
+                    },
+                    onDeleteClick = {
+                        displayRecipeViewModel.deleteRecipe(it)
+                    },
+                    recipeId = displayRecipeUiState.recipeId
                 )
             }
         }
@@ -92,12 +73,12 @@ fun DisplayRecipeScreen(
                 } else {
                     Text(
                         text =
-                        if(name.length > 30) name.take(30) + "..."
-                        else name,
+                        if(displayRecipeUiState.name.length > 30) displayRecipeUiState.name.take(30) + "..."
+                        else displayRecipeUiState.name,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    ingredientItemList?.forEach {
+                    displayRecipeUiState.ingredientItemList.forEach {
                         Spacer(modifier = Modifier.height(8.dp))
                         IngredientItemCard(
                             ingredientItem = it,
@@ -105,10 +86,16 @@ fun DisplayRecipeScreen(
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
-                    RecipeNutritionCard()
+                    RecipeNutritionCard(
+                        amountPerServing = displayRecipeUiState.amountPerServing?.toString(),
+                        calories = displayRecipeUiState.calories,
+                        majorNutrients = displayRecipeUiState.majorNutrientList,
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
-                Button(onClick = showDeleteDialogueBoxClick,
+                Button(onClick = {
+                            displayRecipeViewModel.showDisplayRecipeDialogueBox()
+                        },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {

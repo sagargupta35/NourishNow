@@ -7,20 +7,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sagar.nourishnow.common.Constants
 import com.sagar.nourishnow.common.Resource
+import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
 import com.sagar.nourishnow.presentation.get_recipe.common.GetRecipeUiEvent
+import com.sagar.nourishnow.presentation.get_recipe.use_case.AddRecipeUseCase
 import com.sagar.nourishnow.presentation.get_recipe.use_case.GetRecipeByDtoUseCase
 import com.sagar.nourishnow.presentation.get_recipe.use_case.GetRecipeByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class GetRecipeViewModel @Inject constructor(
+    private val addRecipeUseCase: AddRecipeUseCase,
     private val getRecipeByNameUseCase: GetRecipeByNameUseCase,
     private val getRecipeByDtoUseCase: GetRecipeByDtoUseCase
 ): ViewModel() {
@@ -110,7 +115,14 @@ class GetRecipeViewModel @Inject constructor(
             is GetRecipeUiEvent.PostRecipe -> {
                 postRecipe(
                     showLoading = event.showLoading,
-                    addRecipe = event.addRecipe
+                    addRecipe = {
+                        addRecipe(
+                            resource = it,
+                            date = event.date,
+                            recipeName = event.recipeName,
+                            updateRecipe = event.addRecipe
+                        )
+                    }
                 )
             }
 
@@ -136,7 +148,16 @@ class GetRecipeViewModel @Inject constructor(
                     showAddIngredientDialogueBox = true
                 )
             }
-
+            is GetRecipeUiEvent.ShowLoading -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    isLoading = true
+                )
+            }
+            is GetRecipeUiEvent.HideLoading -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    isLoading = false
+                )
+            }
             else -> {
 
             }
@@ -145,13 +166,15 @@ class GetRecipeViewModel @Inject constructor(
 
     private fun getRecipe(
         showLoading: () -> Unit,
-        addRecipe: (RecipeDto?) -> Unit
+        addRecipe: (Resource<Recipe>) -> Unit
     ) {
         if (getRecipeUiState.value.canGetRecipe) {
             viewModelScope.launch {
                 getRecipeByNameUseCase.getRecipeByName(
                     showLoading = showLoading,
-                    addRecipe = addRecipe,
+                    addRecipe = {
+
+                    },
                     name = getRecipeUiState.value.recipeName
                 )
             }
@@ -163,9 +186,33 @@ class GetRecipeViewModel @Inject constructor(
         }
     }
 
+    private fun addRecipe(
+        resource: Resource<RecipeDto>,
+        date: LocalDate,
+        recipeName: String,
+        updateRecipe: (Resource<Recipe>) -> Unit
+    ){
+        if(resource is Resource.Success && resource.data != null){
+            viewModelScope.launch {
+                addRecipeUseCase.addRecipe(
+                    resource.data,
+                    date = date,
+                    recipeName = recipeName,
+                    updateRecipe = updateRecipe
+                )
+            }
+        } else{
+            _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                isLoading = false,
+                hasError = true,
+                errorMessage = resource.msg ?: "Unable to fetch recipe"
+            )
+        }
+    }
+
     private fun postRecipe(
         showLoading: () -> Unit,
-        addRecipe: (RecipeDto?) -> Unit
+        addRecipe: (Resource<RecipeDto>) -> Unit
     ) {
         if (getRecipeUiState.value.canPostRecipe) {
             viewModelScope.launch {

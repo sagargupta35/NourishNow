@@ -20,7 +20,7 @@ class HomeScreenViewModel @Inject constructor(
     private val initiateAppDetailsUseCase: InitiateAppDetailsUseCase
 ): ViewModel() {
 
-    var _homeScreenUiState by mutableStateOf(HomeScreenUiState())
+    var homeScreenUiState by mutableStateOf(HomeScreenUiState())
         private set
 
     init{
@@ -39,28 +39,28 @@ class HomeScreenViewModel @Inject constructor(
     fun uiEvent(event: HomeScreenUiEvent){
         when (event){
             is HomeScreenUiEvent.AddRecipeClick -> {
-                _homeScreenUiState = _homeScreenUiState.copy(openAddRecipeDialogue = true)
+                homeScreenUiState = homeScreenUiState.copy(openAddRecipeDialogue = true)
             }
             is HomeScreenUiEvent.CloseAddRecipeDialogue -> {
-                _homeScreenUiState = _homeScreenUiState.copy(
+                homeScreenUiState = homeScreenUiState.copy(
                     openAddRecipeDialogue = false
                 )
             }
             is HomeScreenUiEvent.GetRecipeByNameClick -> {
-                _homeScreenUiState = _homeScreenUiState.copy(
+                homeScreenUiState = homeScreenUiState.copy(
                     openAddRecipeDialogue = false,
                     openGetRecipeDialogueBox = true
                 )
             }
             is HomeScreenUiEvent.CancelGetRecipeByName -> {
-                _homeScreenUiState = _homeScreenUiState.copy(
+                homeScreenUiState = homeScreenUiState.copy(
                     openAddRecipeDialogue = false,
                     openGetRecipeDialogueBox = false,
                     recipeName = ""
                 )
             }
             is HomeScreenUiEvent.UpdateRecipeName -> {
-                _homeScreenUiState = _homeScreenUiState.copy(
+                homeScreenUiState = homeScreenUiState.copy(
                     recipeName = event.name
                 )
             }

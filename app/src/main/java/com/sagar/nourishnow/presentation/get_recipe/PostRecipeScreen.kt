@@ -23,27 +23,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
 import com.sagar.nourishnow.presentation.get_recipe.common.AddIngredientDialogueBox
 import com.sagar.nourishnow.presentation.get_recipe.common.GetRecipeUiEvent
 import com.sagar.nourishnow.presentation.get_recipe.common.IngredientItem
 
-@Preview(showBackground = true)
+
 @Composable
 fun PostRecipeScreen(
-    getRecipeUiState: GetRecipeUiState = GetRecipeUiState(
-        recipeDtoPost = RecipeDtoPost(
-            ingredients = listOf(
-                "100g vegetable rice",
-                "200g biryani"
-            )
-        ),
-    ),
-    onEvent: (GetRecipeUiEvent) -> Unit = {},
-    onCancelPostRecipe: () -> Unit = {},
-    showLoading: () -> Unit = {},
-    addRecipe: (RecipeDto?) -> Unit = {}
+    getRecipeViewModel: GetRecipeViewModel = hiltViewModel(),
+    getRecipeUiState: GetRecipeUiState = getRecipeViewModel.getRecipeUiState.value,
+    onEvent: (GetRecipeUiEvent) -> Unit = getRecipeViewModel::uiEvent,
+    onCancelPostRecipe: () -> Unit,
+    addRecipe: (RecipeDto?) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if(getRecipeUiState.showAddIngredientDialogueBox
@@ -188,7 +182,10 @@ fun PostRecipeScreen(
                     Button(
                         onClick = {
                             onEvent(GetRecipeUiEvent.PostRecipe(
-                                showLoading = showLoading,
+                                showLoading = {
+                                    getRecipeViewModel.uiEvent(GetRecipeUiEvent.ClearUiState)
+                                    getRecipeViewModel.uiEvent(GetRecipeUiEvent.ShowLoading)
+                                },
                                 addRecipe = addRecipe
                             ))
                         },

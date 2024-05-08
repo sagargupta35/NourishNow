@@ -11,14 +11,12 @@ import com.sagar.nourishnow.data.offline.model.NutrientsKcalOffline
 import com.sagar.nourishnow.data.repository.RecipeOfflineRepositoryImpl
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
-import com.sagar.nourishnow.presentation.display_recipe.use_case.AddRecipeUseCase
+import com.sagar.nourishnow.presentation.get_recipe.use_case.AddRecipeUseCase
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.time.LocalDate
-import javax.inject.Inject
 
 
 class AddRecipeUseCaseTest {

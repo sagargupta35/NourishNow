@@ -11,10 +11,6 @@ plugins {
 
 }
 
-tasks {
-    // Configure the test task
-
-}
 
 android {
     namespace = "com.sagar.nourishnow"
@@ -83,9 +79,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    androidTestImplementation(libs.androidx.rules)
-    androidTestImplementation(libs.androidx.core.testing)
-    testImplementation(libs.kotlinx.coroutines.test)
 
 
     //viewModel
@@ -114,7 +107,5 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-
-
 
 }

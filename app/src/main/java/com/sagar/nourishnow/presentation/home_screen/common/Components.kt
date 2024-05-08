@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
-@Preview
+
 @Composable
 fun AddRecipeDialogueBox(
     onDismissRequest: () -> Unit = {},
     onGetRecipeClick: () -> Unit = {},
-    onPostRecipeClick:() -> Unit = {},
+    onPostRecipeClick:() -> Unit,
     height: Int = 300
 ) {
     Card(
@@ -58,7 +58,7 @@ fun AddRecipeDialogueBox(
                     cardColor = Color.Red,
                     buttonText = "Get Recipe",
                     height = (height)/2,
-                    {}
+                    onPostRecipeClick
                 )
             }
         }

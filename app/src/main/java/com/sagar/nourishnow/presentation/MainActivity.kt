@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sagar.nourishnow.Navigation
 import com.sagar.nourishnow.presentation.display_recipe.DisplayRecipeScreen
 import com.sagar.nourishnow.presentation.get_recipe.GetRecipeViewModel
 import com.sagar.nourishnow.presentation.get_recipe.PostRecipeScreen
@@ -24,34 +25,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             NourishNowTheme {
                 // A surface container using the 'background' color from the theme
-                val viewModel = hiltViewModel<GetRecipeViewModel>()
+                val viewModel = hiltViewModel<HomeScreenViewModel>()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    HomeScreen(
-//                        addRecipeClick = {
-//                            viewModel.uiEvent(HomeScreenUiEvent.AddRecipeClick)
-//                        },
-//                        closeRecipeClick = {
-//                            viewModel.uiEvent(HomeScreenUiEvent.CloseAddRecipeDialogue)
-//                        },
-//                        homeScreenUiState = viewModel._homeScreenUiState,
-//                        updateRecipeName = {
-//                            viewModel.uiEvent(HomeScreenUiEvent.UpdateRecipeName(it))
-//                        },
-//                        onGetRecipeClick = {
-//                            viewModel.uiEvent(HomeScreenUiEvent.GetRecipeByNameClick)
-//                        },
-//                        onCancelGetRecipeByName = {
-//                            viewModel.uiEvent(HomeScreenUiEvent.CancelGetRecipeByName)
-//                        }
-//                    )
-//                    PostRecipeScreen(
-//                        getRecipeUiState = viewModel.getRecipeUiState.value,
-//                        onEvent = viewModel::uiEvent,
-//                    )
-                    DisplayRecipeScreen()
+                    Navigation()
                 }
             }
         }
