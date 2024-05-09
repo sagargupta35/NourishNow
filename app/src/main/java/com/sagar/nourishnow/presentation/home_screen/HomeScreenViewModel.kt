@@ -6,8 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
+import com.sagar.nourishnow.domain.model.RecipeItem
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
 import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,12 +28,38 @@ class HomeScreenViewModel @Inject constructor(
     init{
         viewModelScope.launch {
             initiateAppDetailsUseCase.initiateApp(
-                { Log.d("TAG", "CalorieStats: ${it.data}")},
-                {Log.d("TAG", "NutrientKcal: ${it.data}")},
-                {Log.d("TAG", "RecipeResource: ${it.data}")},
+                updateCalorieStats = {
+                    if(it is Resource.Success && it.data != null) {
+                        homeScreenUiState = homeScreenUiState.copy(
+                            calorieStats = it.data
+                        )
+                    }
+                },
+                updateNutrientsKcal = {
+                    if(it is Resource.Success && it.data != null) {
+                        homeScreenUiState = homeScreenUiState.copy(
+                            nutrientsKcal = it.data
+                        )
+                    }
+                },
+                addRecipes = {
+                    if(it is Resource.Success && it.data != null){
+                        homeScreenUiState = homeScreenUiState.copy(
+                            recipeItemsList = it.data
+                        )
+                    }
+                },
                 LocalDate.now(),
-                {Log.d("TAG", "Loading")},
-                {Log.d("TAG", "Stopped Loading")}
+                showLoading ={
+                    homeScreenUiState = homeScreenUiState.copy(
+                        isLoading = true
+                    )
+                },
+                hideLoading = {
+                    homeScreenUiState = homeScreenUiState.copy(
+                        isLoading = false
+                    )
+                },
             )
         }
     }
@@ -88,4 +116,6 @@ data class HomeScreenUiState(
         fat = 0.0,
         protein = 0.0
     ),
+    val recipeItemsList: List<RecipeItem> = listOf(),
+    val isLoading: Boolean = false
 )
