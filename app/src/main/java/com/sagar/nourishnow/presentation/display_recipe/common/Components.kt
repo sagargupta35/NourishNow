@@ -51,7 +51,7 @@ fun NutrientRow(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = name,
+                text = getNutrientName(name),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black
@@ -293,7 +293,7 @@ fun RecipeNutritionCard(
         Column(
             modifier = Modifier
                 .padding(vertical = 16.dp,
-                    horizontal = 8.dp
+                    horizontal = 12.dp
                 )
         ) {
             Spacer(modifier = Modifier.height(40.dp))
@@ -410,6 +410,25 @@ fun IngredientItemCard(
                 contentDescription = "Navigate to ingredient description screen",
                 tint = Color.Black
             )
+        }
+    }
+}
+
+fun getNutrientName(
+    name: String
+): String{
+    return when(name){
+        "Carbohydrate, by difference" -> "Carbs (by difference)"
+        "Fatty acids, total saturated" -> "Saturated Fats"
+        "Fatty acids, total trans" -> "Trans Fat"
+        "Fatty acids, total monounsaturated" -> "Monounsaturated Fat"
+        "Fatty acids, total polyunsaturated" -> "Polyunsaturated Fat"
+        "Vitamin C, total ascorbic acid" -> "Vitamin C"
+        "Vitamin E (alpha-tocopherol)" -> "Vitamin E"
+        "Vitamin K (phylloquinone)" -> "Vitamin K"
+        "Sugars, total including NLEA" -> "Total Sugar"
+        else -> {
+            name
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.sagar.nourishnow.presentation.get_recipe
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,12 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sagar.nourishnow.domain.remote.dto.RecipeDto
-import com.sagar.nourishnow.domain.remote.dto.RecipeDtoPost
+import com.sagar.nourishnow.common.Resource
+import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.presentation.get_recipe.common.AddIngredientDialogueBox
 import com.sagar.nourishnow.presentation.get_recipe.common.GetRecipeUiEvent
 import com.sagar.nourishnow.presentation.get_recipe.common.IngredientItem
@@ -37,7 +35,7 @@ fun PostRecipeScreen(
     getRecipeUiState: GetRecipeUiState = getRecipeViewModel.getRecipeUiState.value,
     onEvent: (GetRecipeUiEvent) -> Unit = getRecipeViewModel::uiEvent,
     onCancelPostRecipe: () -> Unit,
-    addRecipe: (RecipeDto?) -> Unit
+    takeRecipe: (Recipe) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if(getRecipeUiState.showAddIngredientDialogueBox
@@ -181,13 +179,14 @@ fun PostRecipeScreen(
                     Spacer(modifier = Modifier.width(4.dp))
                     Button(
                         onClick = {
-                            onEvent(GetRecipeUiEvent.PostRecipe(
-                                showLoading = {
-                                    getRecipeViewModel.uiEvent(GetRecipeUiEvent.ClearUiState)
-                                    getRecipeViewModel.uiEvent(GetRecipeUiEvent.ShowLoading)
-                                },
-                                addRecipe = addRecipe
-                            ))
+                            onEvent(
+                                GetRecipeUiEvent.PostRecipe(
+                                    showLoading = {
+                                        getRecipeViewModel.uiEvent(GetRecipeUiEvent.ShowLoading)
+                                    },
+                                    addRecipe = takeRecipe,
+                                )
+                            )
                         },
                         modifier = Modifier
                             .weight(1F),

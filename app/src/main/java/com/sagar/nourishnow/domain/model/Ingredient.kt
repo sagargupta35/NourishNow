@@ -1,6 +1,7 @@
 package com.sagar.nourishnow.domain.model
 
 import com.sagar.nourishnow.data.offline.model.IngredientOffline
+import com.squareup.moshi.JsonClass
 import java.util.Date
 
 
@@ -10,7 +11,7 @@ import java.util.Date
  */
 
 
-data class Ingredient(
+@JsonClass(generateAdapter = true)data class Ingredient(
     val ingredientId: Long,
     val name: String,
     val fatKcal: Double,

@@ -43,10 +43,12 @@ class GetRecipeViewModel @Inject constructor(
             }
 
             is GetRecipeUiEvent.RecipePostNameChange -> {
+                Log.d("TAG", event.name)
                 _getRecipeUiState.value = _getRecipeUiState.value.copy(
                     recipeDtoPost = _getRecipeUiState.value.recipeDtoPost.copy(title = event.name),
                     canPostRecipe = event.name.isNotBlank()
                 )
+                Log.d("TAG", _getRecipeUiState.value.recipeDtoPost.title ?: "Null Name")
             }
 
             is GetRecipeUiEvent.AddIngredient -> {
@@ -107,22 +109,15 @@ class GetRecipeViewModel @Inject constructor(
 
             is GetRecipeUiEvent.GetRecipe -> {
                 getRecipe(
-                    event.showLoading,
-                    event.addRecipe
+                    showLoading = event.showLoading,
+                    addRecipe = event.addRecipe
                 )
             }
 
             is GetRecipeUiEvent.PostRecipe -> {
                 postRecipe(
                     showLoading = event.showLoading,
-                    addRecipe = {
-                        addRecipe(
-                            resource = it,
-                            date = event.date,
-                            recipeName = event.recipeName,
-                            updateRecipe = event.addRecipe
-                        )
-                    }
+                    addRecipe = event.addRecipe
                 )
             }
 
@@ -166,14 +161,19 @@ class GetRecipeViewModel @Inject constructor(
 
     private fun getRecipe(
         showLoading: () -> Unit,
-        addRecipe: (Resource<Recipe>) -> Unit
+        addRecipe: (Recipe) -> Unit
     ) {
         if (getRecipeUiState.value.canGetRecipe) {
             viewModelScope.launch {
                 getRecipeByNameUseCase.getRecipeByName(
                     showLoading = showLoading,
                     addRecipe = {
-
+                        addRecipe(
+                            resource = it,
+                            date = LocalDate.now(),
+                            recipeName = getRecipeUiState.value.recipeName,
+                            addRecipe = addRecipe
+                        )
                     },
                     name = getRecipeUiState.value.recipeName
                 )
@@ -190,7 +190,7 @@ class GetRecipeViewModel @Inject constructor(
         resource: Resource<RecipeDto>,
         date: LocalDate,
         recipeName: String,
-        updateRecipe: (Resource<Recipe>) -> Unit
+        addRecipe: (Recipe) -> Unit
     ){
         if(resource is Resource.Success && resource.data != null){
             viewModelScope.launch {
@@ -198,7 +198,18 @@ class GetRecipeViewModel @Inject constructor(
                     resource.data,
                     date = date,
                     recipeName = recipeName,
-                    updateRecipe = updateRecipe
+                    updateRecipe = {recipeResource ->
+                        if(recipeResource is Resource.Success && recipeResource.data != null){
+                            uiEvent(GetRecipeUiEvent.HideLoading)
+                            addRecipe(recipeResource.data)
+                        } else{
+                            _getRecipeUiState.value = GetRecipeUiState(
+                                isLoading = false,
+                                hasError = true,
+                                errorMessage = resource.msg ?: "Unable to save recipe"
+                            )
+                        }
+                    }
                 )
             }
         } else{
@@ -212,13 +223,20 @@ class GetRecipeViewModel @Inject constructor(
 
     private fun postRecipe(
         showLoading: () -> Unit,
-        addRecipe: (Resource<RecipeDto>) -> Unit
+        addRecipe: (Recipe) -> Unit
     ) {
         if (getRecipeUiState.value.canPostRecipe) {
             viewModelScope.launch {
                 getRecipeByDtoUseCase.getRecipeByDtoUseCase(
                     showLoading = showLoading,
-                    addRecipe = addRecipe,
+                    addRecipe = {
+                        addRecipe(
+                            resource = it,
+                            date = LocalDate.now(),
+                            recipeName = getRecipeUiState.value.recipeDtoPost.title!!,
+                            addRecipe = addRecipe
+                        )
+                    },
                     recipePostDto = getRecipeUiState.value.recipeDtoPost
                 )
             }

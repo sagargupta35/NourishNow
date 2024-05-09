@@ -11,4 +11,23 @@ object Routes {
     // amountPerServing is yield which is null for ingredient
     // isRecipe is boolean used to distinguish between Recipe or Ingredient
     const val DISPLAY_RECIPE_SCREEN = "displayScreen/{name}/{recipeId}/{foodItem}/{calories}/{amountPerServing}/{isRecipe}"
+
+    fun getDisplayRecipeScreenRoute(
+        name: String,
+        recipeId: Long?,
+        foodItem: String,
+        calories: Int,
+        amountPerServing: Int?,
+        isRecipe: Boolean
+    ): String{
+        return buildString {
+            append("displayScreen/")
+            append("$name/")
+            append("$recipeId/")
+            append("$foodItem/")
+            append("$calories/")
+            append("$amountPerServing/")
+            append("$isRecipe")
+        }
+    }
 }

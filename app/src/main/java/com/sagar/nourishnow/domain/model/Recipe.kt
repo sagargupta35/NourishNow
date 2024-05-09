@@ -1,6 +1,7 @@
 package com.sagar.nourishnow.domain.model
 
 import com.sagar.nourishnow.data.offline.model.RecipeOffline
+import com.squareup.moshi.JsonClass
 import java.time.LocalDate
 import java.util.Date
 
@@ -10,7 +11,7 @@ A recipe is a collection of ingredients
 energy field can be obtained by adding all three params
  */
 
-
+@JsonClass(generateAdapter = true)
 data class Recipe(
     val name: String,
     val fatKcal: Double,

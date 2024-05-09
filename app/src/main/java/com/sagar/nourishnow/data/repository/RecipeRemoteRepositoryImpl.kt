@@ -1,5 +1,6 @@
 package com.sagar.nourishnow.data.repository
 
+import android.util.Log
 import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.remote.EdamamApi
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
@@ -32,6 +33,7 @@ class RecipeRemoteRepositoryImpl @Inject constructor(
         queryMap: Map<String, String>,
         recipe: RecipeDtoPost
     ): Flow<Resource<RecipeDto>> = flow {
+        Log.d("TAG", recipe.toString())
         emit(Resource.Loading("Fetching the requested Recipe"))
         val recipeDto = edamamApi.getRecipeNutrition(recipe, queryMap)
         emit(Resource.Success(recipeDto))

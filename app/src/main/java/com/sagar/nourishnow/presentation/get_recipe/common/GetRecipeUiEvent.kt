@@ -9,9 +9,7 @@ sealed class GetRecipeUiEvent {
     data class RecipeNameChange(val name: String): GetRecipeUiEvent()
     data class GetRecipe(
         val showLoading: () -> Unit,
-        val addRecipe: (Resource<Recipe>) -> Unit,
-        val date: LocalDate,
-        val recipeName: String,
+        val addRecipe: (Recipe) -> Unit
     ): GetRecipeUiEvent()
     data class RecipePostNameChange(val name: String): GetRecipeUiEvent()
     data object AddIngredient: GetRecipeUiEvent()
@@ -21,9 +19,7 @@ sealed class GetRecipeUiEvent {
     data class PrepChange(val prep: String): GetRecipeUiEvent()
     data class PostRecipe(
         val showLoading: () -> Unit,
-        val addRecipe: (Resource<Recipe>) -> Unit,
-        val date: LocalDate,
-        val recipeName: String,
+        val addRecipe: (Recipe) -> Unit
     ): GetRecipeUiEvent()
 
     data object ClearUiState: GetRecipeUiEvent()

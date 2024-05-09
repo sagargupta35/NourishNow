@@ -9,6 +9,7 @@ import com.sagar.nourishnow.domain.model.Ingredient
 import com.sagar.nourishnow.domain.model.IngredientItem
 import com.sagar.nourishnow.domain.model.MajorNutrient
 import com.sagar.nourishnow.domain.model.Recipe
+import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DisplayRecipeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-    private val moshi: Moshi
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
-
+    private val moshi = Moshi
+        .Builder()
+        .add(LocalDateAdapter())
+        .build()
     private var recipeAdapter: JsonAdapter<Recipe> = moshi.adapter(Recipe::class.java)
     private var ingredientAdapter: JsonAdapter<Ingredient> = moshi.adapter(Ingredient::class.java)
     var displayRecipeUiState: DisplayRecipeUiState by mutableStateOf(DisplayRecipeUiState())
@@ -30,10 +33,10 @@ class DisplayRecipeViewModel @Inject constructor(
             val name: String = checkNotNull(savedStateHandle["name"])
             val isRecipe: Boolean = checkNotNull(savedStateHandle["isRecipe"])
             if (isRecipe) {
-                val recipeId: Long = checkNotNull(savedStateHandle["recipeId"])
+                val recipeId: String = checkNotNull(savedStateHandle["recipeId"])
                 val recipeString: String = checkNotNull(savedStateHandle["foodItem"])
                 val recipe: Recipe? = recipeAdapter.fromJson(recipeString)
-                val amountPerServing: Int = checkNotNull(savedStateHandle["amountPerServing"])
+                val amountPerServing: String = checkNotNull(savedStateHandle["amountPerServing"])
                 displayRecipeUiState = if (recipe == null) {
                     DisplayRecipeUiState(
                         hasError = true
@@ -41,11 +44,11 @@ class DisplayRecipeViewModel @Inject constructor(
                 } else {
                     DisplayRecipeUiState(
                         name = name,
-                        recipeId = recipeId,
+                        recipeId = recipeId.toLong(),
                         majorNutrientList = recipe.majorNutrients,
                         ingredientItemList = recipe.ingredients,
                         calories = calories,
-                        amountPerServing = amountPerServing,
+                        amountPerServing = amountPerServing.toInt(),
                         isLoading = false
                     )
                 }
@@ -99,7 +102,7 @@ class DisplayRecipeViewModel @Inject constructor(
 }
 
 data class DisplayRecipeUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val showDeleteRecipeDialogueBox: Boolean = false,
     val hasError: Boolean = false,
     val name: String = "Unable to Fetch the Name",

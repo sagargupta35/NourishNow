@@ -13,5 +13,6 @@ data class RecipeDtoPost(
     val yield: String? = null,
     val time: String? = null,
     val prep: String? = null,
+    @Json(name = "img")
     val image: String? = null
 )

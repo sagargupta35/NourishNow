@@ -66,19 +66,6 @@ class AddRecipeUseCaseTest {
             recipeName = "TEST",
             date = LocalDate.now(),
             updateRecipe = {
-                assert(it != null)
-            },
-            updateCalorieStats = {
-                Log.d("TAG", it.toString())
-            },
-            updateNutrientsKcal = {
-                Log.d("TAG", it.toString())
-            },
-            {
-                Log.d("TAG", "Loading")
-            },
-            {
-                Log.d("TAG", "Stopped Loading")
             }
         )
     }
