@@ -23,11 +23,17 @@ data class RecipeItemOffline(
     val name: String,
     @PrimaryKey(autoGenerate = false)
     val recipeId: Long,
-    val date: LocalDate
+    val date: LocalDate,
+    val carbs: Int,
+    val protein: Int,
+    val fat: Int
 ){
     fun toRecipeItem(): RecipeItem = RecipeItem(
         name = name,
         recipeId = recipeId,
-        date = date
+        date = date,
+        carbs = carbs,
+        protein = protein,
+        fat = fat
     )
 }

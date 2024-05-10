@@ -1,6 +1,7 @@
 package com.sagar.nourishnow
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,11 +14,13 @@ import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.presentation.display_recipe.DisplayRecipeScreen
 import com.sagar.nourishnow.presentation.get_recipe.PostRecipeScreen
 import com.sagar.nourishnow.presentation.home_screen.HomeScreen
+import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
 import com.squareup.moshi.Moshi
 
 @Composable
 fun Navigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val moshi = Moshi
         .Builder()
@@ -31,6 +34,7 @@ fun Navigation(
             route = Routes.HOME_SCREEN
         ){
             HomeScreen(
+                viewModel = homeScreenViewModel,
                 onPostRecipeClick = {
                     navController.navigate(route = Routes.POST_RECIPE_SCREEN)
                 }
@@ -47,6 +51,7 @@ fun Navigation(
                     val name = it.name
                     val calories = (it.carbohydrateKcal + it.fatKcal + it.proteinKcal).toInt()
                     val amountPerServing = it.yield
+                    homeScreenViewModel.refreshScreen()
                     navController.navigate(
                         Routes.getDisplayRecipeScreenRoute(
                             name = name,

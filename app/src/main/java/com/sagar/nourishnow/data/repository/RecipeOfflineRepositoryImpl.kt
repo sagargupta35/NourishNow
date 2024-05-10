@@ -152,7 +152,10 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
             val recipeItemOffline = RecipeItemOffline(
                 recipeId = savedRecipeOfflineId,
                 name = name,
-                date = date
+                date = date,
+                carbs = recipeOffline.carbohydrateKcal.toInt(),
+                protein = recipeOffline.proteinKcal.toInt(),
+                fat = recipeOffline.fatKcal.toInt()
             )
 
             recipeDao.addRecipeItemOffline(recipeItemOffline)

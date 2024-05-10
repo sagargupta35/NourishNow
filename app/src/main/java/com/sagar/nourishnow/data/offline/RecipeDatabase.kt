@@ -18,7 +18,7 @@ import com.sagar.nourishnow.data.offline.model.RecipeOffline
 @Database(entities = [CalorieStatsOffline::class, IngredientOffline::class,
     MajorNutrientOffline::class, NutrientOffline::class, RecipeOffline::class,
     NutrientsKcalOffline::class, IngredientItemOffline::class, RecipeItemOffline::class],
-    version = 1,
+    version = 2,
     exportSchema = false)
 @TypeConverters(DateTypeConverter::class, MeasuringUnitTypeConverter::class)
 abstract class RecipeDatabase: RoomDatabase() {

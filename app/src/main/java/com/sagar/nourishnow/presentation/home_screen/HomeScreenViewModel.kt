@@ -1,6 +1,5 @@
 package com.sagar.nourishnow.presentation.home_screen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,6 +25,10 @@ class HomeScreenViewModel @Inject constructor(
         private set
 
     init{
+        initiateApp()
+    }
+
+    private fun initiateApp(){
         viewModelScope.launch {
             initiateAppDetailsUseCase.initiateApp(
                 updateCalorieStats = {
@@ -61,7 +64,16 @@ class HomeScreenViewModel @Inject constructor(
                     )
                 },
             )
+            homeScreenUiState = homeScreenUiState.copy(
+                refresh = false
+            )
         }
+    }
+
+    fun refreshScreen(){
+        homeScreenUiState = homeScreenUiState.copy(
+            refresh = true
+        )
     }
 
     fun uiEvent(event: HomeScreenUiEvent){
@@ -92,6 +104,9 @@ class HomeScreenViewModel @Inject constructor(
                     recipeName = event.name
                 )
             }
+            is HomeScreenUiEvent.InitiateApp -> {
+                initiateApp()
+            }
             else -> {
 
             }
@@ -117,5 +132,6 @@ data class HomeScreenUiState(
         protein = 0.0
     ),
     val recipeItemsList: List<RecipeItem> = listOf(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val refresh: Boolean = false
 )

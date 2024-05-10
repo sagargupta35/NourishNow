@@ -8,5 +8,8 @@ import java.time.LocalDate
 data class RecipeItem(
     val name: String,
     val recipeId: Long,
-    val date: LocalDate
+    val date: LocalDate,
+    val carbs: Int,
+    val protein: Int,
+    val fat: Int,
 )
