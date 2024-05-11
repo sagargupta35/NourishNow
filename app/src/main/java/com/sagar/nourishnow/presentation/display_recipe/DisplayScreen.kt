@@ -34,7 +34,7 @@ fun DisplayRecipeScreen(
     displayRecipeViewModel: DisplayRecipeViewModel = hiltViewModel(),
     displayRecipeUiState: DisplayRecipeUiState = displayRecipeViewModel.displayRecipeUiState,
     navigateOnError: () -> Unit,
-    onIngredientClick: (Long) -> Unit = {},
+    navigateToDisplayRecipeScreen: (String) -> Unit
 ) {
     if(displayRecipeUiState.hasError){
         displayRecipeViewModel.clearUiState()
@@ -60,20 +60,27 @@ fun DisplayRecipeScreen(
                 )
             }
         }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                if (displayRecipeUiState.isLoading) {
-                    CircularProgressIndicator()
-                } else {
+        if(displayRecipeUiState.isLoading){
+            Column(
+                modifier = Modifier
+                   .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
                     Text(
                         text =
-                        if(displayRecipeUiState.name.length > 30) displayRecipeUiState.name.take(30) + "..."
+                        if (displayRecipeUiState.name.length > 30) displayRecipeUiState.name.take(30) + "..."
                         else displayRecipeUiState.name,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold
@@ -82,7 +89,12 @@ fun DisplayRecipeScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         IngredientItemCard(
                             ingredientItem = it,
-                            onClick = onIngredientClick
+                            onClick = { ingredientId ->
+                                displayRecipeViewModel.onIngredientItemClick(
+                                    ingredientId = ingredientId,
+                                    navigateToDisplayRecipeScreen = navigateToDisplayRecipeScreen
+                                )
+                            }
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -92,19 +104,20 @@ fun DisplayRecipeScreen(
                         majorNutrients = displayRecipeUiState.majorNutrientList,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                }
-                Button(onClick = {
+                    Button(
+                        onClick = {
                             displayRecipeViewModel.showDisplayRecipeDialogueBox()
                         },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Delete Recipe",
-                        fontSize = 20.sp
-                    )
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Delete Recipe",
+                            fontSize = 20.sp
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
-                Spacer(modifier = Modifier.height(12.dp))
             }
         }
     }

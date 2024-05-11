@@ -8,10 +8,16 @@ import com.sagar.nourishnow.domain.remote.EdamamApi
 import com.sagar.nourishnow.data.repository.RecipeRemoteRepositoryImpl
 import com.sagar.nourishnow.data.offline.RecipeDao
 import com.sagar.nourishnow.data.repository.RecipeOfflineRepositoryImpl
+import com.sagar.nourishnow.domain.model.Ingredient
+import com.sagar.nourishnow.domain.model.Recipe
+import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
+import com.sagar.nourishnow.presentation.display_recipe.use_case.CollectIngredientByIdUseCase
 import com.sagar.nourishnow.presentation.get_recipe.use_case.AddRecipeUseCase
+import com.sagar.nourishnow.presentation.home_screen.use_case.CollectRecipeByIdUseCase
 import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -46,11 +52,33 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideMoshi(): Moshi {
         return Moshi
             .Builder()
+            .add(LocalDateAdapter())
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideCollectIngredientByIdUseCase(
+        @ApplicationContext context: Context,
+    ): CollectIngredientByIdUseCase{
+        return CollectIngredientByIdUseCase(
+            provideRecipeOfflineRepository(
+                context
+            )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun ingredientJsonAdaptor(): JsonAdapter<Ingredient>{
+        return provideMoshi()
+            .adapter(Ingredient::class.java)
+    }
+
 
     @Provides
     @Singleton
@@ -61,6 +89,24 @@ object AppModule {
             .addConverterFactory(MoshiConverterFactory.create(provideMoshi()))
             .build()
             .create(EdamamApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCollectRecipeByIdUseCase(
+        @ApplicationContext context: Context,
+    ): CollectRecipeByIdUseCase{
+        return CollectRecipeByIdUseCase(
+            provideRecipeOfflineRepository(
+                context
+            )
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecipeJsonAdaptor(): JsonAdapter<Recipe>{
+        return provideMoshi().adapter(Recipe::class.java)
     }
 
     @Provides

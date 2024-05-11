@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -443,7 +444,8 @@ fun RecipeNameRow(
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.weight(8f)
         ) {
             Text(
                 text = name,
@@ -457,9 +459,11 @@ fun RecipeNameRow(
             )
         }
         Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Recipe Info",
-            Modifier.size(30.dp),
+            Modifier
+                .size(30.dp)
+                .weight(2f),
         )
     }
 }
@@ -593,5 +597,4 @@ fun ProgressBarIndicatorPreview() {
         foregroundIndicatorStrokeWidth = 100f,
         percentageFontSize = MaterialTheme.typography.headlineSmall.fontSize,
     )
-
 }

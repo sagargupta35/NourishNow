@@ -54,11 +54,11 @@ fun Navigation(
                 screens = screens
             )
         }
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(paddingValues)
         ) {
             NavHost(navController = navController,
                 startDestination = Routes.HOME_SCREEN
@@ -67,7 +67,10 @@ fun Navigation(
                     route = Routes.HOME_SCREEN
                 ){
                     HomeScreen(
-                        viewModel = homeScreenViewModel
+                        viewModel = homeScreenViewModel,
+                        navigateToDisplayRecipeScreen = { displayRecipeScreenId ->
+                            navController.navigate(displayRecipeScreenId)
+                        }
                     )
                 }
 
@@ -110,6 +113,9 @@ fun Navigation(
                     DisplayRecipeScreen(
                         navigateOnError = {
                             navController.navigateUp()
+                        },
+                        navigateToDisplayRecipeScreen = {
+                            navController.navigate(it)
                         }
                     )
                 }

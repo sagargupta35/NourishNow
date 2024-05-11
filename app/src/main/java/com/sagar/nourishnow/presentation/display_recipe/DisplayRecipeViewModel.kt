@@ -5,19 +5,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.model.Ingredient
 import com.sagar.nourishnow.domain.model.IngredientItem
 import com.sagar.nourishnow.domain.model.MajorNutrient
 import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
+import com.sagar.nourishnow.presentation.common.Routes
+import com.sagar.nourishnow.presentation.display_recipe.use_case.CollectIngredientByIdUseCase
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DisplayRecipeViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
+    private val collectIngredientByIdUseCase: CollectIngredientByIdUseCase,
+    private val ingredientJsonAdapter: JsonAdapter<Ingredient>
 ): ViewModel() {
     private val moshi = Moshi
         .Builder()
@@ -99,6 +106,41 @@ class DisplayRecipeViewModel @Inject constructor(
 
     }
 
+    fun onIngredientItemClick(
+        ingredientId: Long,
+        navigateToDisplayRecipeScreen: (String) -> Unit
+    ){
+        viewModelScope.launch {
+            displayRecipeUiState = displayRecipeUiState
+                .copy(isLoading = true)
+            collectIngredientByIdUseCase.collectIngredientById(ingredientId){ingredientResource ->
+                if(ingredientResource is Resource.Success && ingredientResource.data != null){
+                    val ingredient = ingredientResource.data
+                    val calories = (ingredient.fatKcal + ingredient.proteinKcal + ingredient.carbohydrateKcal).toInt()
+
+                    val displayRecipeScreenRoute = Routes.getDisplayRecipeScreenRoute(
+                        name = ingredient.name,
+                        calories = calories,
+                        foodItem = ingredientAdapter.toJson(ingredient),
+                        recipeId = null,
+                        amountPerServing = null,
+                        isRecipe = false
+                    )
+                    displayRecipeUiState = displayRecipeUiState
+                        .copy(isLoading = false)
+                    navigateToDisplayRecipeScreen(displayRecipeScreenRoute)
+                } else{
+                    displayRecipeUiState = displayRecipeUiState
+                        .copy(
+                            isLoading = false,
+                            hasError = true,
+                            errorMessage = ingredientResource.msg?: "Unable to fetch ingredient"
+                        )
+                }
+            }
+        }
+    }
+
 }
 
 data class DisplayRecipeUiState(
@@ -110,5 +152,6 @@ data class DisplayRecipeUiState(
     val majorNutrientList: List<MajorNutrient> = listOf(),
     val ingredientItemList: List<IngredientItem> = listOf(),
     val calories: Int = 0,
-    val amountPerServing: Int? = null
+    val amountPerServing: Int? = null,
+    val errorMessage: String = ""
 )

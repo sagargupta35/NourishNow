@@ -7,4 +7,9 @@ sealed class HomeScreenUiEvent {
     data object CancelGetRecipeByName: HomeScreenUiEvent()
     data class UpdateRecipeName(val name: String): HomeScreenUiEvent()
     data object InitiateApp: HomeScreenUiEvent()
+
+    data class RecipeItemClick(
+        val recipeId: Long,
+        val navigateToDisplayRecipeScreen: (String) -> Unit
+    ): HomeScreenUiEvent()
 }

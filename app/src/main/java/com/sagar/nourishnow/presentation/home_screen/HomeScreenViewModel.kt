@@ -8,9 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.sagar.nourishnow.common.Resource
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
+import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.model.RecipeItem
+import com.sagar.nourishnow.presentation.common.Routes
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
+import com.sagar.nourishnow.presentation.home_screen.use_case.CollectRecipeByIdUseCase
 import com.sagar.nourishnow.presentation.home_screen.use_case.InitiateAppDetailsUseCase
+import com.squareup.moshi.JsonAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -18,7 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val initiateAppDetailsUseCase: InitiateAppDetailsUseCase
+    private val initiateAppDetailsUseCase: InitiateAppDetailsUseCase,
+    private val collectRecipeByIdUseCase: CollectRecipeByIdUseCase,
+    private val recipeJsonAdapter: JsonAdapter<Recipe>
 ): ViewModel() {
 
     var homeScreenUiState by mutableStateOf(HomeScreenUiState())
@@ -28,7 +34,7 @@ class HomeScreenViewModel @Inject constructor(
         initiateApp()
     }
 
-    fun initiateApp(){
+    private fun initiateApp(){
         viewModelScope.launch {
             initiateAppDetailsUseCase.initiateApp(
                 updateCalorieStats = {
@@ -70,6 +76,43 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    private fun onRecipeItemClick(
+        id: Long,
+        navigateToDisplayRecipeScreen: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            collectRecipeByIdUseCase.collectRecipeById(
+                id
+            ){
+                homeScreenUiState = homeScreenUiState.copy(isLoading = true)
+                if(it is Resource.Success && it.data != null){
+                    val recipe = it.data
+                    val calories = (recipe.carbohydrateKcal + recipe.proteinKcal + recipe.fatKcal).toInt()
+
+                    val recipeRoute = Routes.getDisplayRecipeScreenRoute(
+                        name = recipe.name,
+                        recipeId = recipe.recipeId,
+                        recipeJsonAdapter.toJson(recipe),
+                        calories = calories,
+                        amountPerServing = recipe.yield,
+                        isRecipe = true
+                    )
+                    homeScreenUiState = homeScreenUiState
+                        .copy(
+                            isLoading = false
+                        )
+                    navigateToDisplayRecipeScreen(recipeRoute)
+                } else{
+                    homeScreenUiState = homeScreenUiState.copy(
+                        isLoading = false,
+                        hasError = true,
+                        errorMessage = it.msg ?: "Unable to Get Recipe Details"
+                    )
+                }
+            }
+        }
+    }
+
     fun refreshScreen(){
         homeScreenUiState = homeScreenUiState.copy(
             refresh = true
@@ -107,6 +150,12 @@ class HomeScreenViewModel @Inject constructor(
             is HomeScreenUiEvent.InitiateApp -> {
                 initiateApp()
             }
+            is HomeScreenUiEvent.RecipeItemClick -> {
+                onRecipeItemClick(
+                    id = event.recipeId,
+                    navigateToDisplayRecipeScreen = event.navigateToDisplayRecipeScreen
+                )
+            }
             else -> {
 
             }
@@ -133,5 +182,7 @@ data class HomeScreenUiState(
     ),
     val recipeItemsList: List<RecipeItem> = listOf(),
     val isLoading: Boolean = false,
-    val refresh: Boolean = false
+    val refresh: Boolean = false,
+    val hasError: Boolean = false,
+    val errorMessage: String = ""
 )

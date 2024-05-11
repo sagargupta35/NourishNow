@@ -148,142 +148,12 @@ fun MajorNutrientColumn(
     }
 }
 
-@Preview
+
 @Composable
 fun RecipeNutritionCard(
-    amountPerServing: String? = "3",
-    calories: Int = 1774,
-    majorNutrients: List<MajorNutrient> = listOf(
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Total Fat",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Saturated fat",
-                    quantity = 2.00,
-                    unit = MeasuringUnit.getUnit("g")
-                ),
-                Nutrient(
-                    name = "Trans Fat",
-                    quantity = 34.00,
-                    unit = MeasuringUnit.getUnit("g")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Cholesterol",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Cholesterol",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("mg")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Sodium",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Sodium",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("mg")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Total Carbohydrates",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Dietary Fibre",
-                    quantity = 34.60,
-                    unit = MeasuringUnit.getUnit("g")
-                ),
-                Nutrient(
-                    name = "Total Sugars",
-                    quantity = 30.30,
-                    unit = MeasuringUnit.getUnit("g")
-                ),
-                Nutrient(
-                    name = "Dietary Fibre",
-                    quantity = 34.60,
-                    unit = MeasuringUnit.getUnit("g")
-                ),
-                Nutrient(
-                    name = "Included - Added Sugars",
-                    quantity = 34.60,
-                    unit = MeasuringUnit.getUnit("g")
-                )
-            ),
-
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Protein",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Protein",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("g")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Vitamin A",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Vitamin A",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("µg")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Calcium",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Calcium",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("mg")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Iron",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Iron",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("mg")
-                )
-            )
-        ),
-        MajorNutrient(
-            recipeId = null,
-            ingredientId = null,
-            name = "Potassium",
-            nutrients = listOf(
-                Nutrient(
-                    name = "Potassium",
-                    quantity = 234.00,
-                    unit = MeasuringUnit.getUnit("mg")
-                )
-            )
-        )
-    )
+    amountPerServing: String?,
+    calories: Int,
+    majorNutrients: List<MajorNutrient>
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
@@ -365,7 +235,9 @@ fun RecipeNutritionCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 majorNutrients.forEach {
-                    MajorNutrientColumn(majorNutrient = it)
+                    if(it.nutrients.isNotEmpty()) {
+                        MajorNutrientColumn(majorNutrient = it)
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(40.dp))

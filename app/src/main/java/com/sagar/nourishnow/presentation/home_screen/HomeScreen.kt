@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.sagar.nourishnow.presentation.home_screen.common.CalorieStatsCard
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
 import com.sagar.nourishnow.presentation.home_screen.common.NutrientsKcalCard
@@ -22,7 +23,8 @@ import com.sagar.nourishnow.presentation.home_screen.common.RecipeItemComposable
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    homeScreenUiState: HomeScreenUiState = viewModel.homeScreenUiState
+    homeScreenUiState: HomeScreenUiState = viewModel.homeScreenUiState,
+    navigateToDisplayRecipeScreen: (String) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()){
         if (homeScreenUiState.refresh) {
@@ -57,8 +59,13 @@ fun HomeScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                             RecipeItemComposable(
                                 recipeItem = recipeItem
-                            ) {
-
+                            ) {recipeId ->
+                                viewModel.uiEvent(
+                                    HomeScreenUiEvent.RecipeItemClick(
+                                        recipeId = recipeId,
+                                        navigateToDisplayRecipeScreen = navigateToDisplayRecipeScreen
+                                    )
+                                )
                             }
                         }
                         Spacer(modifier = Modifier.height(40.dp))
