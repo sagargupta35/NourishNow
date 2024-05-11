@@ -153,6 +153,16 @@ class GetRecipeViewModel @Inject constructor(
                     isLoading = false
                 )
             }
+            is GetRecipeUiEvent.ShowGetRecipeByNameDialogueBox -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    showGetRecipeByNameDialogueBox = true
+                )
+            }
+            is GetRecipeUiEvent.HideGetRecipeByNameDialogueBox -> {
+                _getRecipeUiState.value = _getRecipeUiState.value.copy(
+                    showGetRecipeByNameDialogueBox = false
+                )
+            }
             else -> {
 
             }
@@ -263,5 +273,6 @@ data class GetRecipeUiState(
     val errorMessage: String = "Unknown Error",
     val isLoading: Boolean = false,
     val showAddIngredientDialogueBox: Boolean = false,
-    val addIngredientDialogueBoxValue: String = ""
+    val addIngredientDialogueBoxValue: String = "",
+    val showGetRecipeByNameDialogueBox: Boolean = false,
 )

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sagar.nourishnow.Navigation
+import com.sagar.nourishnow.presentation.common.MyBottomBar
 import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
 import com.sagar.nourishnow.presentation.home_screen.common.CalorieStatsCard
 import com.sagar.nourishnow.ui.theme.NourishNowTheme

@@ -29,4 +29,7 @@ sealed class GetRecipeUiEvent {
     data class AddIngredientDialogueBoxNameChange(val name: String): GetRecipeUiEvent()
     data object ShowLoading: GetRecipeUiEvent()
     data object HideLoading: GetRecipeUiEvent()
+    data object ShowGetRecipeByNameDialogueBox: GetRecipeUiEvent()
+    data object HideGetRecipeByNameDialogueBox: GetRecipeUiEvent()
+
 }

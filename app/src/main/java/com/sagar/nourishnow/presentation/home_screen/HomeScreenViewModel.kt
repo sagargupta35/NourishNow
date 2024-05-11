@@ -28,7 +28,7 @@ class HomeScreenViewModel @Inject constructor(
         initiateApp()
     }
 
-    private fun initiateApp(){
+    fun initiateApp(){
         viewModelScope.launch {
             initiateAppDetailsUseCase.initiateApp(
                 updateCalorieStats = {

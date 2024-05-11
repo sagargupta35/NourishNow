@@ -108,4 +108,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    //bottom bar
+    implementation(libs.animated.navigation.bar)
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+
 }

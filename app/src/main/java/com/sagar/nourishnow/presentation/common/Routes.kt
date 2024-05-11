@@ -1,4 +1,4 @@
-package com.sagar.nourishnow
+package com.sagar.nourishnow.presentation.common
 
 object Routes {
     const val HOME_SCREEN = "home"

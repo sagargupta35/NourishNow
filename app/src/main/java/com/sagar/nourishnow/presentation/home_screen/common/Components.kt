@@ -60,132 +60,6 @@ private data class NutrientInfo(
 )
 
 @Composable
-fun AddRecipeDialogueBox(
-    onDismissRequest: () -> Unit = {},
-    onGetRecipeClick: () -> Unit = {},
-    onPostRecipeClick:() -> Unit,
-    height: Int = 300
-) {
-    Card(
-        modifier = Modifier
-            .height(height.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onSurface)
-    ) {
-        Dialog(
-            onDismissRequest = onDismissRequest
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                AddRecipeButtonCard(
-                    height = (height)/2,
-                    onClick = onGetRecipeClick
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                AddRecipeButtonCard(
-                    cardColor = Color.Red,
-                    buttonText = "Get Recipe",
-                    height = (height)/2,
-                    onPostRecipeClick
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-fun AddRecipeButtonCard(
-    cardColor: Color = Color.Green,
-    buttonText: String = "Add Recipe",
-    height: Int,
-    onClick: () -> Unit,
-) {
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(cardColor)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(height.dp)
-                .clickable {
-                    onClick()
-                },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = buttonText,
-                fontSize = 20.sp
-            )
-        }
-    }
-
-}
-
-@Composable
-fun RecipeNameAlertBox(
-    updateRecipeName: (String) -> Unit,
-    height: Int,
-    onDismissRequest: () -> Unit,
-    getRecipeClick: () -> Unit,
-    recipeName: String
-) {
-    Box(
-        modifier = Modifier
-            .height(height.dp)
-    ) {
-        Dialog(onDismissRequest = onDismissRequest) {
-            Column {
-                TextField(value = recipeName,
-                    onValueChange = updateRecipeName,
-                    modifier = Modifier.fillMaxWidth(),
-
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    OutlinedButton(onClick = onDismissRequest,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier
-                            .weight(1F)
-                            .height(56.dp)
-                            .width(0.dp)
-                    ) {
-                        Text(
-                            text = "Cancel",
-                            fontSize = 16.sp
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Button(
-                        onClick = getRecipeClick,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier
-                            .weight(1F)
-                            .height(56.dp)
-                            .width(0.dp)
-                    ) {
-                        Text(
-                            text = "Get Recipe\uD83D\uDE0B",
-                            fontSize = 16.sp
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-
-@Composable
 fun CalorieStatsCard(
     calorieStats: CalorieStats
 ) {
@@ -489,26 +363,23 @@ fun NutrientRow(
     val maxIndicatorValue = carbs+protein+fat
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier.fillMaxWidth()
     ) {
         NutrientBar(
             name = "Carbs",
-            unit = "kcal",
             indicatorValue = carbs,
             maxIndicatorValue = maxIndicatorValue,
             foreGroundIndicatorColor = Color.Green
         )
         NutrientBar(
             name = "Protein",
-            unit = "kcal",
             indicatorValue = protein,
             maxIndicatorValue = maxIndicatorValue,
             foreGroundIndicatorColor = Color.Magenta
         )
         NutrientBar(
             name = "Fat",
-            unit = "kcal",
             indicatorValue = fat,
             maxIndicatorValue = maxIndicatorValue,
             foreGroundIndicatorColor = Color.Cyan
@@ -521,7 +392,6 @@ fun NutrientRow(
 @Composable
 fun NutrientBar(
     name: String = "Carbs",
-    unit: String = "g",
     indicatorValue: Int = 56,
     maxIndicatorValue: Int = 100,
     foreGroundIndicatorColor: Color = Color.Green
@@ -551,7 +421,7 @@ fun NutrientBar(
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = "$indicatorValue$unit",
+                text = "$indicatorValue",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )
