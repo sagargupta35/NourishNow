@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.sagar.nourishnow.presentation.home_screen.common.CalorieStatsCard
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
 import com.sagar.nourishnow.presentation.home_screen.common.NutrientsKcalCard
@@ -47,7 +46,7 @@ fun HomeScreen(
 
                 LazyColumn(
                     modifier = Modifier
-                        .padding(12.dp)
+                        .padding(16.dp)
                 ) {
                     item {
                         CalorieStatsCard(

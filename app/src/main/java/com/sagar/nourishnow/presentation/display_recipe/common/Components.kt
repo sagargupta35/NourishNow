@@ -188,7 +188,7 @@ fun RecipeNutritionCard(
                 Spacer(
                     modifier = Modifier.height(12.dp)
                 )
-                if (amountPerServing != null){
+                if (amountPerServing != null && amountPerServing != "0"){
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,

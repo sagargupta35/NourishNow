@@ -3,25 +3,16 @@ package com.sagar.nourishnow.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sagar.nourishnow.Navigation
-import com.sagar.nourishnow.presentation.common.MyBottomBar
+import com.sagar.nourishnow.presentation.analytics.AnalyticsScreen
 import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
-import com.sagar.nourishnow.presentation.home_screen.common.CalorieStatsCard
 import com.sagar.nourishnow.ui.theme.NourishNowTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +28,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)
+                    ) {
+                        AnalyticsScreen()
+                    }
                 }
             }
         }

@@ -11,27 +11,23 @@ import com.sagar.nourishnow.domain.model.Ingredient
 import com.sagar.nourishnow.domain.model.IngredientItem
 import com.sagar.nourishnow.domain.model.MajorNutrient
 import com.sagar.nourishnow.domain.model.Recipe
-import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
 import com.sagar.nourishnow.presentation.common.Routes
 import com.sagar.nourishnow.presentation.display_recipe.use_case.CollectIngredientByIdUseCase
+import com.sagar.nourishnow.presentation.display_recipe.use_case.DeleteRecipeUseCase
 import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class DisplayRecipeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val collectIngredientByIdUseCase: CollectIngredientByIdUseCase,
-    private val ingredientJsonAdapter: JsonAdapter<Ingredient>
+    private val ingredientJsonAdapter: JsonAdapter<Ingredient>,
+    private val recipeJsonAdapter: JsonAdapter<Recipe>,
+    private val deleteRecipeUseCase: DeleteRecipeUseCase
 ): ViewModel() {
-    private val moshi = Moshi
-        .Builder()
-        .add(LocalDateAdapter())
-        .build()
-    private var recipeAdapter: JsonAdapter<Recipe> = moshi.adapter(Recipe::class.java)
-    private var ingredientAdapter: JsonAdapter<Ingredient> = moshi.adapter(Ingredient::class.java)
     var displayRecipeUiState: DisplayRecipeUiState by mutableStateOf(DisplayRecipeUiState())
 
     init{
@@ -42,7 +38,7 @@ class DisplayRecipeViewModel @Inject constructor(
             if (isRecipe) {
                 val recipeId: String = checkNotNull(savedStateHandle["recipeId"])
                 val recipeString: String = checkNotNull(savedStateHandle["foodItem"])
-                val recipe: Recipe? = recipeAdapter.fromJson(recipeString)
+                val recipe: Recipe? = recipeJsonAdapter.fromJson(recipeString)
                 val amountPerServing: String = checkNotNull(savedStateHandle["amountPerServing"])
                 displayRecipeUiState = if (recipe == null) {
                     DisplayRecipeUiState(
@@ -56,19 +52,27 @@ class DisplayRecipeViewModel @Inject constructor(
                         ingredientItemList = recipe.ingredients,
                         calories = calories,
                         amountPerServing = amountPerServing.toInt(),
-                        isLoading = false
+                        isLoading = false,
+                        carbCal = recipe.carbohydrateKcal,
+                        fatCal = recipe.fatKcal,
+                        proteinCal = recipe.proteinKcal,
+                        recipeDate = recipe.date
                     )
                 }
 
             } else {
                 val ingredientString: String = checkNotNull(savedStateHandle["foodItem"])
-                val ingredient: Ingredient? = ingredientAdapter.fromJson(ingredientString)
+                val ingredient: Ingredient? = ingredientJsonAdapter.fromJson(ingredientString)
                 displayRecipeUiState = if(ingredient != null){
                     DisplayRecipeUiState(
                         name = name,
                         majorNutrientList = ingredient.majorNutrients,
                         calories = calories,
-                        isLoading = false
+                        isLoading = false,
+                        carbCal = ingredient.carbohydrateKcal,
+                        fatCal = ingredient.fatKcal,
+                        proteinCal = ingredient.proteinKcal,
+                        isRecipe = false
                     )
                 } else{
                     DisplayRecipeUiState(
@@ -102,8 +106,31 @@ class DisplayRecipeViewModel @Inject constructor(
         displayRecipeUiState = DisplayRecipeUiState()
     }
 
-    fun deleteRecipe(id: Long){
-
+    fun deleteRecipe(
+        id: Long,
+        refreshHomeScreen: () -> Unit,
+        navigateUp: () -> Unit
+    ){
+        viewModelScope.launch {
+            showLoading()
+            deleteRecipeUseCase.deleteRecipe(
+                recipeId = id,
+                date = displayRecipeUiState.recipeDate,
+                carbCal = displayRecipeUiState.carbCal,
+                fatCal = displayRecipeUiState.fatCal,
+                proteinCal = displayRecipeUiState.proteinCal,
+                refreshScreen = refreshHomeScreen
+            ){errorMessage ->
+                if(errorMessage != null){
+                    displayRecipeUiState = displayRecipeUiState
+                       .copy(
+                            hasError = true,
+                            errorMessage = errorMessage
+                        )
+                }
+            }
+            navigateUp()
+        }
     }
 
     fun onIngredientItemClick(
@@ -121,7 +148,7 @@ class DisplayRecipeViewModel @Inject constructor(
                     val displayRecipeScreenRoute = Routes.getDisplayRecipeScreenRoute(
                         name = ingredient.name,
                         calories = calories,
-                        foodItem = ingredientAdapter.toJson(ingredient),
+                        foodItem = ingredientJsonAdapter.toJson(ingredient),
                         recipeId = null,
                         amountPerServing = null,
                         isRecipe = false
@@ -153,5 +180,10 @@ data class DisplayRecipeUiState(
     val ingredientItemList: List<IngredientItem> = listOf(),
     val calories: Int = 0,
     val amountPerServing: Int? = null,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val carbCal: Double = 0.0,
+    val fatCal: Double = 0.0,
+    val proteinCal: Double = 0.0,
+    val recipeDate: LocalDate = LocalDate.now(),
+    val isRecipe: Boolean = true
 )

@@ -3,9 +3,17 @@ package com.sagar.nourishnow
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,6 +32,7 @@ import com.sagar.nourishnow.presentation.home_screen.HomeScreen
 import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
 import com.squareup.moshi.Moshi
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navigation(
     navController: NavHostController = rememberNavController(),
@@ -46,14 +55,26 @@ fun Navigation(
             }
         )
     )
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
         bottomBar = {
             MyBottomBar(
                 navController = navController,
                 screens = screens
             )
-        }
+        },
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(text = "Nourish Now")
+                },
+                scrollBehavior =scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF6A5ACD))
+            )
+        },
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -116,11 +137,16 @@ fun Navigation(
                         },
                         navigateToDisplayRecipeScreen = {
                             navController.navigate(it)
+                        },
+                        refreshHomeScreen = {
+                            homeScreenViewModel.refreshScreen()
+                        },
+                        navigateUp = {
+                            navController.navigateUp()
                         }
                     )
                 }
             }
         }
     }
-
 }

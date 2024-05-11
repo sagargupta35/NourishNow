@@ -113,4 +113,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.androidx.material)
 
+    //ycharts
+    implementation(libs.ycharts)
+
 }

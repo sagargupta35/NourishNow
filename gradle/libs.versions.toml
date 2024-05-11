@@ -37,6 +37,7 @@ roomRuntime = "2.6.1"
 junitKtx = "1.1.5"
 testingKtx = "1.4.0"
 ui = "1.6.7"
+ycharts = "2.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -85,6 +86,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit2-kotlin-coroutines-adapter = { module = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter", version.ref = "retrofit2KotlinCoroutinesAdapter" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
+ycharts = { module = "co.yml:ycharts", version.ref = "ycharts" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

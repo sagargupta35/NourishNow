@@ -34,7 +34,9 @@ fun DisplayRecipeScreen(
     displayRecipeViewModel: DisplayRecipeViewModel = hiltViewModel(),
     displayRecipeUiState: DisplayRecipeUiState = displayRecipeViewModel.displayRecipeUiState,
     navigateOnError: () -> Unit,
-    navigateToDisplayRecipeScreen: (String) -> Unit
+    navigateToDisplayRecipeScreen: (String) -> Unit,
+    refreshHomeScreen: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     if(displayRecipeUiState.hasError){
         displayRecipeViewModel.clearUiState()
@@ -54,7 +56,11 @@ fun DisplayRecipeScreen(
                         displayRecipeViewModel.hideDisplayRecipeDialogueBox()
                     },
                     onDeleteClick = {
-                        displayRecipeViewModel.deleteRecipe(it)
+                        displayRecipeViewModel.deleteRecipe(
+                            it,
+                            refreshHomeScreen = refreshHomeScreen,
+                            navigateUp = navigateUp
+                        )
                     },
                     recipeId = displayRecipeUiState.recipeId
                 )
@@ -104,19 +110,21 @@ fun DisplayRecipeScreen(
                         majorNutrients = displayRecipeUiState.majorNutrientList,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Button(
-                        onClick = {
-                            displayRecipeViewModel.showDisplayRecipeDialogueBox()
-                        },
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Delete Recipe",
-                            fontSize = 20.sp
-                        )
+                    if(displayRecipeUiState.isRecipe) {
+                        Button(
+                            onClick = {
+                                displayRecipeViewModel.showDisplayRecipeDialogueBox()
+                            },
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Delete Recipe",
+                                fontSize = 20.sp
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }

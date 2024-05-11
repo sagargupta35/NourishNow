@@ -426,6 +426,11 @@ fun NutrientBar(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )
+            Text(
+                text = "kcal",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
