@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.sagar.nourishnow.Navigation
 import com.sagar.nourishnow.presentation.analytics.AnalyticsScreen
 import com.sagar.nourishnow.presentation.home_screen.HomeScreenViewModel
 import com.sagar.nourishnow.ui.theme.NourishNowTheme
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(8.dp)
                     ) {
-                        AnalyticsScreen()
+                        Navigation()
                     }
                 }
             }

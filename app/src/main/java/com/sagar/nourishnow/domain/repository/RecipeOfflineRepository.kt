@@ -48,4 +48,6 @@ interface RecipeOfflineRepository {
 
     suspend fun updateCalorieStats(calorieStats: CalorieStats)
 
+    fun getWeeklyNutrientsAnalysis(): Flow<Resource<List<NutrientsKcal>>>
+
 }

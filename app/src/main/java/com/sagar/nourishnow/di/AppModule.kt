@@ -13,6 +13,7 @@ import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import com.sagar.nourishnow.domain.repository.RecipeRemoteRepository
+import com.sagar.nourishnow.presentation.analytics.use_case.GetWeeklyAnalyticsUseCase
 import com.sagar.nourishnow.presentation.display_recipe.use_case.CollectIngredientByIdUseCase
 import com.sagar.nourishnow.presentation.get_recipe.use_case.AddRecipeUseCase
 import com.sagar.nourishnow.presentation.home_screen.use_case.CollectRecipeByIdUseCase
@@ -134,6 +135,14 @@ object AppModule {
     @Provides
     fun provideAddRecipeUseCase(@ApplicationContext context: Context): AddRecipeUseCase {
         return AddRecipeUseCase(provideRecipeOfflineRepository(context))
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeeklyAnalyticsUseCase(
+        @ApplicationContext context: Context
+    ): GetWeeklyAnalyticsUseCase{
+        return GetWeeklyAnalyticsUseCase(provideRecipeOfflineRepository(context))
     }
 
 }

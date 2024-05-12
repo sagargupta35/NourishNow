@@ -46,7 +46,7 @@ fun HomeScreen(
 
                 LazyColumn(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(12.dp)
                 ) {
                     item {
                         CalorieStatsCard(

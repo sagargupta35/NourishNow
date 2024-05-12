@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.sagar.nourishnow.domain.model.Recipe
 import com.sagar.nourishnow.domain.model.adapter.LocalDateAdapter
+import com.sagar.nourishnow.presentation.analytics.AnalyticsScreen
 import com.sagar.nourishnow.presentation.common.MyBottomBar
 import com.sagar.nourishnow.presentation.common.Routes
 import com.sagar.nourishnow.presentation.common.Screen
@@ -45,15 +46,15 @@ fun Navigation(
     val jsonAdapter= moshi.adapter(Recipe::class.java)
     val screens = listOf(
         Screen.Home(
-            onButtonClick = {
-
-            }
+            onButtonClick = {}
         ),
         Screen.PostRecipe(
-            onButtonClick = {
-
-            }
+            onButtonClick = {}
+        ),
+        Screen.AnalyticsScreen(
+            onButtonClick = {}
         )
+
     )
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
@@ -145,6 +146,12 @@ fun Navigation(
                             navController.navigateUp()
                         }
                     )
+                }
+
+                composable(
+                    route = Routes.ANALYTICS_SCREEN
+                ){
+                    AnalyticsScreen()
                 }
             }
         }

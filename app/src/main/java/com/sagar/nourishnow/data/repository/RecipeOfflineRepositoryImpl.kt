@@ -1,8 +1,5 @@
 package com.sagar.nourishnow.data.repository
 
-import android.util.Log
-import androidx.compose.ui.res.stringResource
-import com.sagar.nourishnow.R
 import com.sagar.nourishnow.common.Constants
 import com.sagar.nourishnow.common.Constants.majorNutrientsMap
 import com.sagar.nourishnow.common.Resource
@@ -28,10 +25,8 @@ import com.sagar.nourishnow.domain.remote.dto.NutrientDto
 import com.sagar.nourishnow.domain.remote.dto.RecipeDto
 import com.sagar.nourishnow.domain.repository.RecipeOfflineRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import java.time.LocalDate
-import java.util.Date
 import javax.inject.Inject
 
 class RecipeOfflineRepositoryImpl @Inject constructor(
@@ -269,5 +264,15 @@ class RecipeOfflineRepositoryImpl @Inject constructor(
 
     override suspend fun updateCalorieStats(calorieStats: CalorieStats) =
         recipeDao.updateCalorieStats(calorieStats.toCalorieStatsOffline())
+
+    override fun getWeeklyNutrientsAnalysis(): Flow<Resource<List<NutrientsKcal>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val nutrientsKcalList = recipeDao.getWeeklyNutrientsAnalysis()
+            emit(Resource.Success(nutrientsKcalList.map { it.toNutrientsKcal() }))
+        } catch (e: Exception){
+            emit(Resource.Error(e.localizedMessage?: "No items found for the given date"))
+        }
+    }
 
 }

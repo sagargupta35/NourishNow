@@ -1,7 +1,6 @@
 package com.sagar.nourishnow.data.offline
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -15,9 +14,7 @@ import com.sagar.nourishnow.data.offline.model.NutrientsKcalOffline
 import com.sagar.nourishnow.data.offline.model.RecipeItemOffline
 import com.sagar.nourishnow.data.offline.model.RecipeOffline
 import com.sagar.nourishnow.domain.model.NutrientsKcal
-import kotlinx.coroutines.flow.*
 import java.time.LocalDate
-import java.util.Date
 
 
 @Dao
@@ -75,6 +72,9 @@ interface RecipeDao {
 
     @Query("SELECT * FROM NutrientsKcalOffline WHERE date = :date")
     suspend fun getNutrientKcalByDate(date: LocalDate): NutrientsKcalOffline?
+
+    @Query("SELECT * FROM NutrientsKcalOffline ORDER BY date DESC LIMIT 7")
+    suspend fun getWeeklyNutrientsAnalysis(): List<NutrientsKcalOffline>
 
     @Update
     suspend fun updateNutrientKcal(nutrientsKcal: NutrientsKcalOffline)

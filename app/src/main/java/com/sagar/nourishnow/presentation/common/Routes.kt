@@ -11,6 +11,7 @@ object Routes {
     // amountPerServing is yield which is null for ingredient
     // isRecipe is boolean used to distinguish between Recipe or Ingredient
     const val DISPLAY_RECIPE_SCREEN = "displayScreen/{name}/{recipeId}/{foodItem}/{calories}/{amountPerServing}/{isRecipe}"
+    const val ANALYTICS_SCREEN = "analyticsScreen"
 
     fun getDisplayRecipeScreenRoute(
         name: String,

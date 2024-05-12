@@ -98,6 +98,7 @@ class DeleteRecipeUseCase @Inject constructor(
                                 carbohydrates = nutrientKcalResource.data.carbohydrates - carbCal,
                                 fat = nutrientKcalResource.data.fat - fatCal,
                                 protein = nutrientKcalResource.data.protein - proteinCal,
+                                energy = nutrientKcalResource.data.energy - (carbCal + proteinCal + fatCal).toInt()
                             )
                         recipeOfflineRepository.updateNutrientsKcal(updateNutrientsKcal.toNutrientsKcal())
                         return true

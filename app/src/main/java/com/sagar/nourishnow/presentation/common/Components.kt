@@ -8,6 +8,7 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -22,6 +23,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 
+
+// For each Screen add the corresponding data class in Navigation file
+// On buttonClick is just an optional lambda to do some additional work if any
 sealed class Screen(
     val route: String,
     val title: String,
@@ -43,6 +47,15 @@ sealed class Screen(
         Routes.POST_RECIPE_SCREEN,
         "Add Recipe",
         Icons.Filled.Add,
+        onButtonClick
+    )
+
+    data class AnalyticsScreen(
+        val onButtonClick: () -> Unit
+    ): Screen(
+        Routes.ANALYTICS_SCREEN,
+        "Analytics",
+        Icons.Filled.DateRange,
         onButtonClick
     )
 }
