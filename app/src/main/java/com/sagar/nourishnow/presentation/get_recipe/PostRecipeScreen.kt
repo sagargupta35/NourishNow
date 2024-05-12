@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.icons.Icons
@@ -61,12 +62,13 @@ fun PostRecipeScreen(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .absolutePadding(bottom = 20.dp)
-                    .offset(y = (-20).dp)
+                    .offset(y = (-20).dp),
+                backgroundColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Icon(
                     imageVector = Icons.Default.Create,
                     contentDescription = null,
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
         }
@@ -135,7 +137,8 @@ fun PostRecipeScreen(
                                 onClick = {
                                     onEvent(GetRecipeUiEvent.ShowAddIngredientDialogueBox)
                                 },
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                             ) {
                                 Text(
                                     text = "Add Ingredient",

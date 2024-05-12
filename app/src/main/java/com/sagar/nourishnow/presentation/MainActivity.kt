@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 val viewModel = hiltViewModel<HomeScreenViewModel>()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.surface
                 ) {
                     Column(
                         modifier = Modifier

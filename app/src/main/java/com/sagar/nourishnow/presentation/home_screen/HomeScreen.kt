@@ -17,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sagar.nourishnow.presentation.home_screen.common.CalorieStatsCard
 import com.sagar.nourishnow.presentation.home_screen.common.HomeScreenUiEvent
 import com.sagar.nourishnow.presentation.home_screen.common.NutrientsKcalCard
-import com.sagar.nourishnow.presentation.home_screen.common.RecipeItemComposable
+import com.sagar.nourishnow.presentation.home_screen.common.RecipeItemCard
 
 @Composable
 fun HomeScreen(
@@ -56,7 +56,7 @@ fun HomeScreen(
                         NutrientsKcalCard(nutrientsKcal = homeScreenUiState.nutrientsKcal)
                         homeScreenUiState.recipeItemsList.forEach { recipeItem ->
                             Spacer(modifier = Modifier.height(12.dp))
-                            RecipeItemComposable(
+                            RecipeItemCard(
                                 recipeItem = recipeItem
                             ) {recipeId ->
                                 viewModel.uiEvent(

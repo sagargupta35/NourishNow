@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,18 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,13 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.sagar.nourishnow.domain.model.CalorieStats
 import com.sagar.nourishnow.domain.model.NutrientsKcal
 import com.sagar.nourishnow.domain.model.RecipeItem
@@ -65,7 +59,8 @@ fun CalorieStatsCard(
     calorieStats: CalorieStats
 ) {
     Card(
-        elevation = CardDefaults.cardElevation(8.dp)
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
     ) {
         Row(
             modifier = Modifier
@@ -81,16 +76,25 @@ fun CalorieStatsCard(
                 NutrientText(
                     name = "Limit",
                     quantity = calorieStats.calorieLimit,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 NutrientText(
                     name = "Taken",
                     quantity = calorieStats.caloriesConsumed,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 NutrientText(
                     name = "Left",
                     quantity = calorieStats.caloriesRemaining,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
             }
             Spacer(modifier = Modifier.width(4.dp))
@@ -101,7 +105,8 @@ fun CalorieStatsCard(
                 percentageFontSize = 20.sp,
                 indicatorValue = calorieStats.caloriesConsumed,
                 maxIndicatorValue = calorieStats.calorieLimit,
-                canvasSize = 140.dp
+                canvasSize = 140.dp,
+                backgroundIndicatorColor = MaterialTheme.colorScheme.onTertiary
             )
         }
     }
@@ -150,7 +155,9 @@ private fun CarbohydrateCard(
         carbs = 560
     ),
 ) {
-    Card {
+    Card(
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -168,8 +175,8 @@ private fun CarbohydrateCard(
                 ) {
                     Text(
                         text = name,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -180,7 +187,8 @@ private fun CarbohydrateCard(
                     percentageFontSize = 20.sp,
                     indicatorValue = indicatorValue,
                     maxIndicatorValue = maxIndicatorValue,
-                    canvasSize = 130.dp
+                    canvasSize = 130.dp,
+                    backgroundIndicatorColor = MaterialTheme.colorScheme.onTertiary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -192,16 +200,25 @@ private fun CarbohydrateCard(
                 NutrientText(
                     name = "Carbs",
                     quantity = nutrientInfo.carbs,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 NutrientText(
                     name = "Protein",
-                    quantity = nutrientInfo.protein
+                    quantity = nutrientInfo.protein,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 NutrientText(
                     name = "Carbs",
-                    quantity = nutrientInfo.fat
+                    quantity = nutrientInfo.fat,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    headLineStyle = MaterialTheme.typography.titleLarge,
+                    bodyLineStyle = MaterialTheme.typography.titleMedium
                 )
             }
         }
@@ -252,7 +269,8 @@ private fun MajorNutrientKcal(
 ) {
     Card(
         elevation = CardDefaults.cardElevation(8.dp),
-        modifier = modifier
+        modifier = modifier,
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -272,8 +290,8 @@ private fun MajorNutrientKcal(
                 ) {
                     Text(
                         text = name,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -284,7 +302,8 @@ private fun MajorNutrientKcal(
                     percentageFontSize = 20.sp,
                     indicatorValue = indicatorValue,
                     maxIndicatorValue = maxIndicatorValue,
-                    canvasSize = 130.dp
+                    canvasSize = 130.dp,
+                    backgroundIndicatorColor = MaterialTheme.colorScheme.onTertiary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -297,26 +316,30 @@ fun NutrientText(
     name: String,
     quantity: Int,
     headingSize: Int = 20,
-    valueSize: Int = 18
+    valueSize: Int = 18,
+    color: Color = Color.Black,
+    headLineStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    bodyLineStyle: TextStyle = MaterialTheme.typography.titleMedium
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "$name: ",
-            fontSize = headingSize.sp,
-            fontWeight = FontWeight.Bold
+            color = color,
+            style = headLineStyle
         )
         Text(
             text = "$quantity kcal",
-            fontSize = valueSize.sp
+            color = color,
+            style = bodyLineStyle
         )
     }
 }
 
 
 @Composable
-fun RecipeItemComposable(
+fun RecipeItemCard(
     recipeItem: RecipeItem = RecipeItem(
         name = "Vegetable Rice",
         recipeId = 0L,
@@ -333,7 +356,8 @@ fun RecipeItemComposable(
         modifier = Modifier
             .clickable {
                 onClick(recipeItem.recipeId)
-            }
+            },
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer)
     ) {
         Column(
             modifier = Modifier
@@ -405,11 +429,11 @@ fun NutrientBar(
             canvasSize = 60.dp,
             indicatorValue = indicatorValue,
             maxIndicatorValue = maxIndicatorValue,
-            backgroundIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+            backgroundIndicatorColor = MaterialTheme.colorScheme.onTertiaryContainer,
             backgroundIndicatorStrokeWidth = 20f,
             foreGroundIndicatorColor = foreGroundIndicatorColor,
             foregroundIndicatorStrokeWidth = 20f,
-            percentageFontSize = 12.sp
+            percentageFontSize = 12.sp,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Column(
@@ -418,18 +442,15 @@ fun NutrientBar(
         ) {
             Text(
                 text = name,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
                 text = "$indicatorValue",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
                 text = "kcal",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
@@ -443,7 +464,8 @@ fun RecipeNameRow(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -454,13 +476,12 @@ fun RecipeNameRow(
         ) {
             Text(
                 text = name,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 20.sp
+                style = MaterialTheme.typography.headlineSmall
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "\uD83D\uDD25$calories kcal",
-                fontSize = 16.sp
+                style = MaterialTheme.typography.titleMedium
             )
         }
         Icon(

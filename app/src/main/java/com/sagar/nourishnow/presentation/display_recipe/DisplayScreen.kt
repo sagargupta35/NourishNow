@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -88,8 +89,7 @@ fun DisplayRecipeScreen(
                         text =
                         if (displayRecipeUiState.name.length > 30) displayRecipeUiState.name.take(30) + "..."
                         else displayRecipeUiState.name,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.headlineLarge
                     )
                     displayRecipeUiState.ingredientItemList.forEach {
                         Spacer(modifier = Modifier.height(8.dp))

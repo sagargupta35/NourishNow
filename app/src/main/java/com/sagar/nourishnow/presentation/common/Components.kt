@@ -1,5 +1,6 @@
 package com.sagar.nourishnow.presentation.common
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationDefaults
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +23,15 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-
+import com.sagar.nourishnow.ui.theme.surfaceBrightDark
+import com.sagar.nourishnow.ui.theme.surfaceBrightDarkMediumContrast
+import com.sagar.nourishnow.ui.theme.surfaceContainerDark
+import com.sagar.nourishnow.ui.theme.surfaceContainerDarkHighContrast
+import com.sagar.nourishnow.ui.theme.surfaceContainerHighDark
+import com.sagar.nourishnow.ui.theme.surfaceContainerHighDarkHighContrast
+import com.sagar.nourishnow.ui.theme.surfaceContainerHighLight
+import com.sagar.nourishnow.ui.theme.surfaceContainerHighLightHighContrast
+import com.sagar.nourishnow.ui.theme.surfaceContainerHighestDark
 
 
 // For each Screen add the corresponding data class in Navigation file
@@ -70,7 +80,7 @@ fun MyBottomBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     BottomNavigation(
-        elevation = 20.dp
+        backgroundColor = if(isSystemInDarkTheme()) surfaceBrightDarkMediumContrast else surfaceContainerHighLightHighContrast,
     ) {
         screens.forEach {screen ->
             AddItem(
@@ -93,7 +103,10 @@ fun RowScope.AddItem(
 
     BottomNavigationItem(
         label = {
-            Text(text = screen.title)
+            Text(
+                text = screen.title,
+                style = MaterialTheme.typography.labelMedium
+            )
         },
         icon = {
             Icon(

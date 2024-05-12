@@ -53,15 +53,15 @@ fun NutrientRow(
         ) {
             Text(
                 text = getNutrientName(name),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black,
+                fontSize = 16.sp
             )
             Text(
                 text = "${DecimalFormat("#.##").format(quantity)} ${unit.symbol}",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = Color.Black
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black,
+                fontSize = 16.sp
             )
         }
     }
@@ -117,8 +117,8 @@ fun MajorNutrientColumn(
             ) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(text = majorNutrient.name,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 24.sp,
                     color = Color.Black
                 )
             }
@@ -176,8 +176,8 @@ fun RecipeNutritionCard(
                 ) {
                     Text(
                         text = "Nutrition Facts",
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontSize = 36.sp,
                         color = Color.Black
                     )
                 }
@@ -197,14 +197,14 @@ fun RecipeNutritionCard(
                     ) {
                         Text(
                             text = "Amount Per Serving",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontSize = 36.sp,
                             color = Color.Black
                         )
                         Text(
                             text = amountPerServing,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontSize = 36.sp,
                             color = Color.Black
                         )
                     }
@@ -216,14 +216,14 @@ fun RecipeNutritionCard(
                 ) {
                     Text(
                         text = "Calories",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 36.sp,
                         color = Color.Black
                     )
                     Text(
                         text = "$calories",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 40.sp,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 36.sp,
                         color = Color.Black
                     )
                 }
@@ -258,7 +258,7 @@ fun IngredientItemCard(
     )
 ) {
     Card(
-        colors = CardDefaults.cardColors(Color(0xFFDDDDDD)),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .clickable { onClick(ingredientItem.ingredientId) }
@@ -276,12 +276,12 @@ fun IngredientItemCard(
             Text(
                 text = ingredientItem.name,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSecondary
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Navigate to ingredient description screen",
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
     }
