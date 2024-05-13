@@ -54,13 +54,13 @@ fun NutrientRow(
             Text(
                 text = getNutrientName(name),
                 style = MaterialTheme.typography.titleMedium,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.inverseOnSurface,
                 fontSize = 16.sp
             )
             Text(
                 text = "${DecimalFormat("#.##").format(quantity)} ${unit.symbol}",
                 style = MaterialTheme.typography.titleMedium,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.inverseOnSurface,
                 fontSize = 16.sp
             )
         }
@@ -108,7 +108,7 @@ fun MajorNutrientColumn(
     ) {
         Card(
             shape = RoundedCornerShape(4.dp),
-            colors = CardDefaults.cardColors(Color(0xFFEDEDED))
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Start,
@@ -119,7 +119,7 @@ fun MajorNutrientColumn(
                 Text(text = majorNutrient.name,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 24.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -158,7 +158,7 @@ fun RecipeNutritionCard(
 ) {
     Card(
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(Color.White),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.inverseSurface),
         elevation = CardDefaults.cardElevation(12.dp)
     ) {
         Column(
@@ -178,13 +178,13 @@ fun RecipeNutritionCard(
                         text = "Nutrition Facts",
                         style = MaterialTheme.typography.headlineMedium,
                         fontSize = 36.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.inverseOnSurface
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(
-                    color = Color.LightGray,
-                    thickness = 12.dp
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    thickness = 12.dp,
                 )
                 Spacer(
                     modifier = Modifier.height(12.dp)
@@ -199,13 +199,13 @@ fun RecipeNutritionCard(
                             text = "Amount Per Serving",
                             style = MaterialTheme.typography.titleMedium,
                             fontSize = 36.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.inverseOnSurface
                         )
                         Text(
                             text = amountPerServing,
                             style = MaterialTheme.typography.titleMedium,
                             fontSize = 36.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.inverseOnSurface
                         )
                     }
                 }
@@ -218,20 +218,20 @@ fun RecipeNutritionCard(
                         text = "Calories",
                         style = MaterialTheme.typography.titleMedium,
                         fontSize = 36.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.inverseOnSurface
                     )
                     Text(
                         text = "$calories",
                         style = MaterialTheme.typography.titleMedium,
                         fontSize = 36.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.inverseOnSurface
                     )
                 }
                 Spacer(
                     modifier = Modifier.height(12.dp)
                 )
                 Divider(
-                    color = Color.LightGray,
+                    color = MaterialTheme.colorScheme.surfaceVariant,
                     thickness = 8.dp
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -258,7 +258,7 @@ fun IngredientItemCard(
     )
 ) {
     Card(
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .clickable { onClick(ingredientItem.ingredientId) }
@@ -276,12 +276,12 @@ fun IngredientItemCard(
             Text(
                 text = ingredientItem.name,
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSecondary
+                color = MaterialTheme.colorScheme.onPrimary
             )
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = "Navigate to ingredient description screen",
-                tint = MaterialTheme.colorScheme.onSecondary
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         }
     }

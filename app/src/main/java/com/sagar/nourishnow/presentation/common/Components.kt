@@ -80,7 +80,7 @@ fun MyBottomBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     BottomNavigation(
-        backgroundColor = if(isSystemInDarkTheme()) surfaceBrightDarkMediumContrast else surfaceContainerHighLightHighContrast,
+        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
     ) {
         screens.forEach {screen ->
             AddItem(
@@ -105,13 +105,15 @@ fun RowScope.AddItem(
         label = {
             Text(
                 text = screen.title,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
             )
         },
         icon = {
             Icon(
                 imageVector = screen.icon,
-                contentDescription = screen.title
+                contentDescription = screen.title,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer
             )
         },
         selected = currentDestination == screen.route,

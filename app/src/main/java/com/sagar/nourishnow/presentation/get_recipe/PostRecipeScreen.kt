@@ -61,8 +61,8 @@ fun PostRecipeScreen(
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
-                    .absolutePadding(bottom = 20.dp)
-                    .offset(y = (-20).dp),
+                    .absolutePadding(bottom = 28.dp)
+                    .offset(y = (-28).dp),
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Icon(
@@ -346,7 +346,7 @@ fun BottomRowButtons(
                 .fillMaxWidth()
                 .background(color = MaterialTheme.colorScheme.surface),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             OutlinedButton(
                 onClick = {
@@ -384,5 +384,6 @@ fun BottomRowButtons(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(8.dp))
     }
 }

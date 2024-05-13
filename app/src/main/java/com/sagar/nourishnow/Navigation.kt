@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -67,10 +69,14 @@ fun Navigation(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Nourish Now")
+                    Text(
+                        text = "Nourish Now",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        style = MaterialTheme.typography.headlineLarge
+                    )
                 },
                 scrollBehavior =scrollBehavior,
-                colors = TopAppBarDefaults.topAppBarColors(Color(0xFF6A5ACD))
+                colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.secondary)
             )
         },
         modifier = Modifier

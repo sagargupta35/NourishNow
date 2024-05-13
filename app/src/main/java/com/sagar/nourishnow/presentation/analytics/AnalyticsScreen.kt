@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,8 +18,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.linechart.LineChart
@@ -34,13 +38,6 @@ import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import com.sagar.nourishnow.domain.model.NutrientsKcal
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sagar.nourishnow.presentation.home_screen.common.ProgressIndicatorBar
 
 @Composable
@@ -78,17 +75,19 @@ fun AnalyticsScreen(
             minCalories = minCalories
         )
 
-        val axisColor = Color(0xFFB0E0E6)
+        val axisColor = MaterialTheme.colorScheme.tertiaryContainer
         val xAxisData = getXAxisData(
             pointsData.size - 1,
-            backgroundColor = axisColor
+            backgroundColor = axisColor,
+            axisLabelColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
 
         val yAxisData = getYAxisData(
             steps = 7.coerceAtMost(1.coerceAtLeast(pointsData.size - 1)),
             maxCalories = maxCalories,
             minCalories = minCalories,
-            backgroundColor = axisColor
+            backgroundColor = axisColor,
+            axisLabelColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
 
         val lineChartData = LineChartData(
@@ -142,6 +141,7 @@ fun AnalyticsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
+                Spacer(modifier = Modifier.height(8.dp))
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp)
 
@@ -200,7 +200,6 @@ fun AverageNutrientInfo(
                 maxIndicatorValue = 1250,
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -211,14 +210,14 @@ fun AverageNutrientInfo(
             NutrientCard(
                 name = "Fat",
                 indicatorValue = avgFat,
-                indicatorColor = Color.Cyan,
+                indicatorColor = Color.Green,
                 maxIndicatorValue = 450,
             )
             Spacer(modifier = Modifier.height(8.dp))
             NutrientCard(
                 name = "Protein",
                 indicatorValue = avgProtein,
-                indicatorColor = Color.Magenta,
+                indicatorColor = Color.Yellow,
                 maxIndicatorValue = 350,
             )
         }
@@ -235,7 +234,8 @@ fun NutrientCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        elevation = CardDefaults.cardElevation(8.dp)
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
     ) {
         Column(
             modifier = modifier
@@ -245,24 +245,23 @@ fun NutrientCard(
         ) {
             Text(
                 text = name,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
             ProgressIndicatorBar(
                 backgroundIndicatorStrokeWidth = 20f,
                 foreGroundIndicatorColor = indicatorColor,
-                foregroundIndicatorStrokeWidth = 35f,
+                foregroundIndicatorStrokeWidth = 30f,
                 percentageFontSize = 20.sp,
                 indicatorValue = indicatorValue,
                 maxIndicatorValue = maxIndicatorValue,
-                canvasSize = 130.dp
+                canvasSize = 130.dp,
+                backgroundIndicatorColor = MaterialTheme.colorScheme.onTertiary
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = indicatorValue.toString(),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
+                style = MaterialTheme.typography.titleMedium
             )
         }
     }
@@ -273,12 +272,14 @@ private fun getYAxisData(
     steps: Int,
     minCalories: Double,
     maxCalories: Double,
-    backgroundColor: Color
+    backgroundColor: Color,
+    axisLabelColor: Color
 ): AxisData{
     return AxisData.Builder()
         .axisStepSize(15.dp)
         .steps(steps)
         .backgroundColor(backgroundColor)
+        .axisLabelColor(axisLabelColor)
         .labelAndAxisLinePadding(4.dp)
         .labelData {i ->
             (minCalories + i * ((maxCalories-minCalories)/(steps.toFloat()))).toInt().toString()
@@ -288,13 +289,15 @@ private fun getYAxisData(
 
 private fun getXAxisData(
     steps: Int,
-    backgroundColor: Color
+    backgroundColor: Color,
+    axisLabelColor: Color
 ) : AxisData{
     return AxisData.Builder()
         .axisStepSize(100.dp)
         .steps(steps)
         .backgroundColor(backgroundColor)
         .labelData { i -> (i+1).toString() }
+        .axisLabelColor(axisLabelColor)
         .labelAndAxisLinePadding(4.dp)
         .build()
 }

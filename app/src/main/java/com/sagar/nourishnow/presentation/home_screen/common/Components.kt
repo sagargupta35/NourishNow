@@ -101,7 +101,7 @@ fun CalorieStatsCard(
             ProgressIndicatorBar(
                 backgroundIndicatorStrokeWidth = 20f,
                 foreGroundIndicatorColor = Color.Magenta,
-                foregroundIndicatorStrokeWidth = 35f,
+                foregroundIndicatorStrokeWidth = 30f,
                 percentageFontSize = 20.sp,
                 indicatorValue = calorieStats.caloriesConsumed,
                 maxIndicatorValue = calorieStats.calorieLimit,
@@ -183,7 +183,7 @@ private fun CarbohydrateCard(
                 ProgressIndicatorBar(
                     backgroundIndicatorStrokeWidth = 20f,
                     foreGroundIndicatorColor = foreGroundIndicatorColor,
-                    foregroundIndicatorStrokeWidth = 35f,
+                    foregroundIndicatorStrokeWidth = 30f,
                     percentageFontSize = 20.sp,
                     indicatorValue = indicatorValue,
                     maxIndicatorValue = maxIndicatorValue,
@@ -244,7 +244,7 @@ fun ProteinFatRow(
             name = "Protein",
             indicatorValue = proteinKcal,
             maxIndicatorValue = 350,
-            foreGroundIndicatorColor = Color.Magenta,
+            foreGroundIndicatorColor = Color.Yellow,
         )
         Spacer(modifier = Modifier.width(12.dp))
         MajorNutrientKcal(
@@ -298,7 +298,7 @@ private fun MajorNutrientKcal(
                 ProgressIndicatorBar(
                     backgroundIndicatorStrokeWidth = 20f,
                     foreGroundIndicatorColor = foreGroundIndicatorColor,
-                    foregroundIndicatorStrokeWidth = 35f,
+                    foregroundIndicatorStrokeWidth = 30f,
                     percentageFontSize = 20.sp,
                     indicatorValue = indicatorValue,
                     maxIndicatorValue = maxIndicatorValue,
@@ -407,7 +407,7 @@ fun NutrientRow(
             name = "Fat",
             indicatorValue = fat,
             maxIndicatorValue = maxIndicatorValue,
-            foreGroundIndicatorColor = Color.Cyan
+            foreGroundIndicatorColor = Color.Yellow
         )
     }
 
@@ -526,7 +526,6 @@ fun ProgressIndicatorBar(
         tween(1000),
         label = ""
     )
-
 
     Column(
         modifier = Modifier
